@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CombatScreenController {
+    private CombatScreen cs;
     @FXML
     private Button attackButton;
     @FXML
@@ -23,10 +24,10 @@ public class CombatScreenController {
     private Button defeatTest;
 
     public void initialize(){
+        cs = new CombatScreen();
         attackButton.setOnAction(event -> attackEnemy());
         itemsButton.setOnAction(event -> showItems());
         runButton.setOnAction(event -> escapeEncounter());
-
         testButton.setOnAction(event -> afterCombat());
         endTestButton.setOnAction(event -> winGame());
         defeatTest.setOnAction(event -> defeated());
@@ -61,6 +62,7 @@ public class CombatScreenController {
     }
 
     private void attackEnemy() {
+        cs.Attacked();
     }
 
     public void afterCombat(){
