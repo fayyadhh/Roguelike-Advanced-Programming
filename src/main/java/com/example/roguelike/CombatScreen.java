@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class CombatScreen {
     Level level = new Level();
-    Enemy m;
+    Enemy m = new Enemy();
     Player p;
     // public CombatScreen(){
     //     try {
@@ -25,20 +25,20 @@ public class CombatScreen {
     //     }
     // }
 
-    public void Attacked(){
+    public void Attacked(int damage){
         try {
-            Random random = new Random();
-            int crit = random.nextInt(100) + 1;
-            int attackpower = p.getAttackPower();
-            double critChance = p.getCritMultiplier();
-            double critDam = p.getCriticalDamageMultiplier();
-            int outputpower = attackpower;
+            // Random random = new Random();
+            // int crit = random.nextInt(100) + 1;
+            // int attackpower = p.getAttackPower();
+            // double critChance = p.getCritMultiplier();
+            // double critDam = p.getCriticalDamageMultiplier();
+            int outputpower = damage;
     
-            if (critChance != 0){
-                if (crit <= critChance){
-                    outputpower *= critDam;
-                }
-            }
+            // if (critChance != 0){
+            //     if (crit <= critChance){
+            //         outputpower *= critDam;
+            //     }
+            // }
     
             if(p.isLifeSteal()){
                 double lifesteal = outputpower * 0.25;
@@ -133,3 +133,12 @@ public class CombatScreen {
         return m.isDead();
     }
 }
+
+
+/*
+ * Current fucking problem is IDK what combatscreen is for
+ * so im gonna go eat and come back and hopefully know what to do
+ * because everything is getting fucked because combatscreen exists.
+ * im tempted to just delete it because i truly believe that there is no use for combatscreen
+ * thank you
+ */

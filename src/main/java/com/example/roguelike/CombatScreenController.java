@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public class CombatScreenController {
-    private CombatScreen cs;
+    //private CombatScreen cs;
     @FXML
     private Button attackButton;
     @FXML
@@ -42,11 +43,21 @@ public class CombatScreenController {
     private ProgressBar playerHealthBar;
     @FXML
     private ImageView playerImage;
+    @FXML
+    private Text playerHitIndicator;
+
+    //Enemy elements
+    @FXML //@FML haha lol 
+    private ProgressBar enemyHealthBar;
+    @FXML
+    private Text enemyName;
+    @FXML
+    private Text enemyHitIndicator;
 
 
     //variables
     private Player player;
-    private Enemy enemy;
+    private Enemy enemy = new Enemy();
     private Level level;
     private Timeline qteTimeline;
     private double qtePosition;
@@ -58,8 +69,16 @@ public class CombatScreenController {
 
     @FXML
     public void initialize(){
-        cs = new CombatScreen();
+        //cs = new CombatScreen();
+        
+        //Level Initialization
+        level = new Level();
+        
+        //Spawns the Enemy
         spawnEnemy();
+        enemyHitIndicator.setVisible(false);
+        enemyName.setVisible(false);
+
         //TODO Conditional Statement to switch the enemy sprite based on the enemy that spawns
 
 
@@ -68,7 +87,9 @@ public class CombatScreenController {
         runButton.setOnAction(event -> escapeEncounter());
 
         //Player Linking
-        player = new Player("Player", 100, 14, 0);
+        player = new Player("Player", 100, 1, 0);
+        playerHealthBar.setProgress(player.getCurrentHealth() / player.getMaxHealth());
+        playerHitIndicator.setVisible(false);
 
 
         //Quick Time Event Thingy
@@ -83,6 +104,7 @@ public class CombatScreenController {
         qtePane.setStyle("-fx-background-color: black;");
         qtePane.setVisible(false);
 
+        
 
         //Test Buttons
         testButton.setOnAction(event -> afterCombat());
@@ -102,15 +124,16 @@ public class CombatScreenController {
         int currentLevel = level.getLevel() % 10;
         switch (currentLevel){
             case 5:
-                enemy.spawnRandomEnemy(EnemyType.STRONG);
+                enemy = enemy.spawnRandomEnemy(EnemyType.STRONG);
                 break;
             case 10:
-                enemy.spawnRandomBoss();
+                enemy = enemy.spawnRandomBoss();
                 break;
             default:
-                enemy.spawnRandomEnemy(EnemyType.REGULAR);
+                enemy = enemy.spawnRandomEnemy(EnemyType.REGULAR);
+                break;
         }
-        
+        updateEnemyGUI();    
     }
 
     private void handleAttack(){
@@ -127,7 +150,7 @@ public class CombatScreenController {
     private void startQTE(){
         Random rand = new Random();
         double totalWidth = qtePane.getWidth();
-        double critWidth = totalWidth * 0.1;
+        double critWidth = totalWidth * player.getCritMultiplier();
         double regularHitWidth = totalWidth * 0.2; //Just the size for the regular hit. change the mult if needed
 
         //Randomize green and yellow positions
@@ -135,7 +158,7 @@ public class CombatScreenController {
         double yellowStart;
         do{
             yellowStart = rand.nextDouble() * (totalWidth - regularHitWidth);
-        } while (Math.abs(yellowStart - greenStart) < critWidth); //Ensure the zones don't overlap
+        } while (Math.abs(yellowStart - greenStart) < critWidth + regularHitWidth && yellowStart < greenStart + critWidth); //Ensure the zones don't overlap
 
         //Make sure that thezones stay within the bounds PLEASE PLEASE PLEASE STAY WITHIN THE BOUNDS I BEG YOU PLEASE
         greenStart = Math.max(0, Math.min(greenStart, totalWidth - critWidth));
@@ -183,6 +206,9 @@ public class CombatScreenController {
     }
         
     private void checkQTEHit(){
+    double barStart = qteBar.getTranslateX();
+    double barEnd = barStart + qteBar.getWidth();
+
     double barCenter = qteBar.getTranslateX() + qteBar.getWidth() / 2;
     double greenStart = greenZone.getTranslateX();
     double greenEnd = greenStart + greenZone.getWidth();
@@ -190,21 +216,27 @@ public class CombatScreenController {
     double yellowStart = yellowZone.getTranslateX();
     double yellowEnd = yellowStart + yellowZone.getWidth();
 
-    int damage;
+    double attackMultiplier;
 
-    if(barCenter >= greenStart && barCenter <= greenEnd){
+    if(barStart <= greenEnd && barEnd >= greenStart){
         //Crit Damage
-        damage = 50; //For now setting this to 50, but i'll change so that it does crit damage.
+        attackMultiplier = 1.5; //For now setting this to 50, but i'll change so that it does crit damage.
+        playerHitIndicator.setText("CRIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
 
-    } else if (barCenter >= yellowStart && barCenter <= yellowEnd){
+    } else if (barStart <= yellowEnd && barEnd >= yellowStart){
         //Regular Hit
-        damage = 20; //same as above. change later
+        attackMultiplier = 1; //same as above. change later
+        playerHitIndicator.setText("HIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
     } else{
-        damage = 0; //Miss lol
+        attackMultiplier = 0; //Miss lol
+        playerHitIndicator.setText("MISS! Better Luck Next Time");
     }
 
-    attackEnemy(damage);
+    attackEnemy(attackMultiplier);
+     
     qtePane.setVisible(false);
+
+    playerHitIndicator.setVisible(true);
 
     attackButton.setVisible(true);
     itemsButton.setVisible(true);
@@ -244,16 +276,50 @@ public class CombatScreenController {
     }
 
     private void enemyAttack() {
-        enemy.attack();
+        String enemyAction = enemy.enemyTurn();
+        enemyHitUpdate(enemyAction);
+        updatePlayerGUI();
+        
+        if(player.checkPlayerDead()){
+            defeated();
+        }
     }
 
-    private void attackEnemy(int damage) {
-        cs.Attacked(damage);
+    private void enemyHitUpdate(String action) {
+        switch (action){
+            case "Attack":
+                enemyHitIndicator.setText("Enemy Attacked for " + enemy.getAttackPower());
+                enemyHitIndicator.setVisible(true);
+                break;
+            case "Block":
+                enemyHitIndicator.setText("Enemy Blocked");
+                enemyHitIndicator.setVisible(true);
+                break;
+        }
+    }
 
-        if(cs.isEnemyDead()){
+    private void attackEnemy(double attackMultiplier) {
+        // cs.Attacked(damage);
+
+        // if(cs.isEnemyDead()){
+        //     afterCombat();
+        // }
+
+        player.attack(enemy, attackMultiplier);
+
+        updateEnemyGUI();
+
+        if(enemy.isDead()){
             afterCombat();
         }
+    }
 
+    private void updateEnemyGUI() {
+        if (enemy != null){
+            enemyHealthBar.setProgress((double) enemy.getCurrentHealth() / enemy.getMaxHealth());
+        }
+        enemyName.setText(enemy.getName());
+        enemyName.setVisible(true);
     }
 
     public void afterCombat(){

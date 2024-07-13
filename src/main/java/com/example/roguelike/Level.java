@@ -1,7 +1,7 @@
 package com.example.roguelike;
 
 public class Level {
-    public int level = 0;
+    public int level = 1;
     public int round = 0;
 
     public int getLevel() {

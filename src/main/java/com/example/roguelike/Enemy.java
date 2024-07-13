@@ -23,14 +23,19 @@ public class Enemy {
     private Player player;
 
     //Constructor
+    public Enemy(){
+        this.type = EnemyType.REGULAR;
+        this.name = "Placeholder Enemy";
+    }
+
     public Enemy(EnemyType type, String name) {
         this.type = type;
         this.name = name;
-        configureEnemy();
+        configureEnemy(name);
     }
 
     //Methods
-    public void spawnRandomEnemy(EnemyType type){
+    public Enemy spawnRandomEnemy(EnemyType type){
         //List of possible enemies that could spawn
         String[] possibleEnemies = {"Slime", "Goblin", "Skeleton", "Worm"};
 
@@ -41,9 +46,10 @@ public class Enemy {
         
         //Construct new enemy
         Enemy newEnemy = new Enemy(type, randomEnemy);
+        return newEnemy;
     }
 
-    public void spawnRandomBoss(){
+    public Enemy spawnRandomBoss(){
         //List of possible bosses that could spawn
         String[] possibleBosses = {"Slime King", "Goblin King", "Skeleton King", "Worm King"}; //Change values in this boss list
         
@@ -54,26 +60,27 @@ public class Enemy {
 
         //Construct new boss
         Enemy newBoss = new Enemy(EnemyType.BOSS, randomBoss);
+        return newBoss;
     }
 
 
 
-    private void configureEnemy() {
+    private void configureEnemy(String name) {
         switch (type) {
             case REGULAR:
-                configureRegularEnemy();
+                configureRegularEnemy(name);
                 break;
             case STRONG:
                 StrongEnemyIncreaseStats(level.getLevel());
                 break;
             case BOSS:
-                configureBossEnemy();
+                configureBossEnemy(name);
                 break;
         }
     }
 
-    private void configureRegularEnemy() {
-        switch (this.name.toLowerCase()){
+    private void configureRegularEnemy(String name) {
+        switch (name.toLowerCase()){
             case "slime":
                 this.currentHealth = 10;
                 this.maxHealth = 10;
@@ -115,12 +122,12 @@ public class Enemy {
         this.attackPower = (int) (this.attackPower * Math.pow(attackPowerIncreaseModifier, level));
     }
 
-    private void configureBossEnemy(){
+    private void configureBossEnemy(String name){
 
     }
 
     //Methods for the enemy's turns (i have no idea what im doing im just freeballing rn)
-    public void enemyTurn(){
+    public String enemyTurn(){
         //Start of enemy's turn, reset the block
         resetBlockAmount();
 
@@ -131,11 +138,14 @@ public class Enemy {
         if(blockPreference > 0){
             if (chosenAction < 0.5){
                 attack();
+                return "Attack";
             } else {
                 block(blockPreference);
+                return "Block";
             }
         } else {
             attack();
+            return "Attack";
         }
     }
 
@@ -151,6 +161,14 @@ public class Enemy {
         this.defense = 0;
     }
 
+    public void takeDamage(int damage){
+        int damageTaken = damage - defense;
+        if(damageTaken < 0){
+            damageTaken = 0;
+        }
+        this.currentHealth -= damageTaken;
+    }
+
     //Getters and Setters
 
     public String getName() {
@@ -163,6 +181,10 @@ public class Enemy {
 
     public void setCurrentHealth(int health) {
         this.currentHealth = health;
+    }
+
+    public int getMaxHealth(){
+        return maxHealth;
     }
 
     public int getAttackPower() {
