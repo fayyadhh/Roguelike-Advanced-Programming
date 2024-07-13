@@ -23,7 +23,7 @@ public class Item {
                 player.setAttackPower(player.getAttackPower() + 5);
                 break;
             case "Hearty Amulet":
-                player.setHealth(player.getHealth() + 10);
+                player.setMaxHealth(player.getMaxHealth() + 10);
                 break;
             case "Glasses":
                 player.setCriticalAreaSize(player.getCriticalAreaSize() + 10);

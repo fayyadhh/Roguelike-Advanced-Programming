@@ -8,29 +8,29 @@ public class CombatScreen {
     Level level = new Level();
     Enemy m;
     Player p;
-    public CombatScreen(){
-        try {
-            if (level.level == 0 && level.round == 0){
-                p = new Player("Player",100,14,0);
-            }
-            if (level.level == 0){
-                m = new Enemy("Banana",200,1,0,"Null");
-                m.setLevel(level.level+1);
-            }
-            level.levelup();
-            level.roundUp();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-        }
-    }
+    // public CombatScreen(){
+    //     try {
+    //         if (level.level == 0 && level.round == 0){
+    //             p = new Player("Player",100,14,0);
+    //         }
+    //         if (level.level == 0){
+    //             m = new Enemy("Banana",200,1,0,"Null");
+    //             m.setLevel(level.level+1);
+    //         }
+    //         level.levelup();
+    //         level.roundUp();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //         System.out.println(e.getMessage());
+    //     }
+    // }
 
     public void Attacked(){
         try {
             Random random = new Random();
             int crit = random.nextInt(100) + 1;
             int attackpower = p.getAttackPower();
-            int critChance = p.getCriticalAreaSize();
+            double critChance = p.getCritMultiplier();
             double critDam = p.getCriticalDamageMultiplier();
             int outputpower = attackpower;
     
@@ -41,13 +41,8 @@ public class CombatScreen {
             }
     
             if(p.isLifeSteal()){
-<<<<<<< Updated upstream
-                double lifesteal = attackpower * 0.25;
-                int health = p.getHealth();
-=======
                 double lifesteal = outputpower * 0.25;
                 int health = p.getCurrentHealth();
->>>>>>> Stashed changes
                 int total = (int)lifesteal + health;
                 p.setCurrentHealth(total);
             }
@@ -79,10 +74,10 @@ public class CombatScreen {
     public void enemyAttacked(int outputpower) {
         try {
             int enemydefense = m.getDefense();
-            int enemyHealth = m.getHealth();
+            int enemyHealth = m.getCurrentHealth();
             int totaldamage = outputpower - enemydefense;
     
-            m.setHealth(enemyHealth-totaldamage);
+            m.setCurrentHealth(enemyHealth-totaldamage);
             enemyAttack();
             System.out.println("Enemy got hit for " + totaldamage);
         } catch (Exception e) {
@@ -126,7 +121,7 @@ public class CombatScreen {
         try {
             System.out.println("Round = " + level.getRound());
             System.out.println("Player HP: " + p.getCurrentHealth());
-            System.out.println("Enemy HP: " + m.getHealth());
+            System.out.println("Enemy HP: " + m.getCurrentHealth());
             level.roundUp();
         } catch (Exception e){
             e.printStackTrace();

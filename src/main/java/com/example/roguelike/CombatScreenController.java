@@ -1,21 +1,22 @@
 package com.example.roguelike;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-<<<<<<< Updated upstream
-=======
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
->>>>>>> Stashed changes
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Random;
 
 public class CombatScreenController {
     private CombatScreen cs;
@@ -32,13 +33,6 @@ public class CombatScreenController {
     @FXML
     private Button defeatTest;
 
-<<<<<<< Updated upstream
-    public void initialize(){
-        cs = new CombatScreen();
-        attackButton.setOnAction(event -> attackEnemy());
-        itemsButton.setOnAction(event -> showItems());
-        runButton.setOnAction(event -> escapeEncounter());
-=======
     //QTE Elements
     @FXML
     private StackPane qtePane;
@@ -91,14 +85,11 @@ public class CombatScreenController {
 
 
         //Test Buttons
->>>>>>> Stashed changes
         testButton.setOnAction(event -> afterCombat());
         endTestButton.setOnAction(event -> winGame());
         defeatTest.setOnAction(event -> defeated());
     }
 
-<<<<<<< Updated upstream
-=======
     private void updatePlayerGUI(){
         //Updates player health on the progress bar
         if (player != null){
@@ -224,7 +215,6 @@ public class CombatScreenController {
 
     
 
->>>>>>> Stashed changes
     private void defeated() {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatScreen.fxml"));
@@ -253,10 +243,6 @@ public class CombatScreenController {
     private void escapeEncounter() {
     }
 
-<<<<<<< Updated upstream
-    private void attackEnemy() {
-        cs.Attacked();
-=======
     private void enemyAttack() {
         enemy.attack();
     }
@@ -268,7 +254,6 @@ public class CombatScreenController {
             afterCombat();
         }
 
->>>>>>> Stashed changes
     }
 
     public void afterCombat(){

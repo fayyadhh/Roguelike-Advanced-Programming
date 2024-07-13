@@ -65,6 +65,10 @@ public class Player {
         this.currentHealth = health;
     }
 
+    public void setMaxHealth(int health){
+        this.maxHealth = health;
+    }
+
     public int getAttackPower() {
         return attackPower;
     }
