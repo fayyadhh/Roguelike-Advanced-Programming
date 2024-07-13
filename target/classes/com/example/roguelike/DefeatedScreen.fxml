@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.roguelike.DefeatedScreenController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roguelike.DefeatedScreenController">
+   <children>
+      <Text layoutX="281.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Defeat!" />
+      <Text layoutX="240.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Better Luck Next Time!" />
+      <Text layoutX="287.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" />
+      <Text layoutX="284.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Items:" />
+      <Button fx:id="mainMenuButton" layoutX="262.0" layoutY="303.0" mnemonicParsing="false" text="Main Menu" />
+   </children>
 </AnchorPane>

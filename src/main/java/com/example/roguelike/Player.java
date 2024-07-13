@@ -1,5 +1,10 @@
 package com.example.roguelike;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +29,10 @@ public class Player {
     private int itemSpawnRate;
 
     // Constructor
+    public Player(String fileName) {
+        loadPlayerData(fileName);
+    }
+
     public Player(String name, int health, int attackPower, int defense) {
         this.name = name;
         this.currentHealth = health;
@@ -172,17 +181,21 @@ public class Player {
     }
 
     //  Methods
-    public void attack(Enemy enemy) {
-        int damage = attackPower - enemy.getDefense();
+    public void attack(Enemy enemy, double attackMultiplier) {
+        int damage =  (int) ((attackPower * attackMultiplier) - enemy.getDefense());
         if (damage > 0) {
-            //enemy.takeDamage(damage); This is done in the combat screen
+            enemy.takeDamage(damage); //This is done in the combat screen
+            //WRONG THIS ISNT DONE IN ATTACK SCREEN BC COMBATSCREEN DOESNT HAVE A USE :SOB:
+        } else if (damage <= 0) {
+            //Miss lol
+            //TODO implement a message for when the player misses
         }
     }
 
     public void takeDamage(int amount) {
         int damage = amount - defense;
         if (damage > 0) {
-            currentHealth -= damage;
+            setCurrentHealth(currentHealth - 5);;
             if (currentHealth < 0) {
                 currentHealth = 0;
             }
@@ -241,7 +254,125 @@ public class Player {
         inventory.add(item);
     }
 
+    //Save to file
+    public void savePlayerData() {
+        String fileName = "playerData.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("Name: " + this.name + "\n");
+            writer.write("Current Health: " + this.currentHealth + "\n");
+            writer.write("Max Health: " + this.maxHealth + "\n");
+            writer.write("Attack Power: " + this.attackPower + "\n");
+            writer.write("Defense: " + this.defense + "\n");
+            writer.write("Crit Multiplier: " + this.critMultiplier + "\n");
+            writer.write("Critical Damage Multiplier: " + this.criticalDamageMultiplier + "\n");
+            writer.write("Reflect Damage: " + this.reflectDamage + "\n");
+            writer.write("Heal Per Turn: " + this.healPerTurn + "\n");
+            writer.write("Life Steal: " + this.lifeSteal + "\n");
+            writer.write("Has Extra Actions: " + this.hasExtraActions + "\n");
+            writer.write("Double Attack: " + this.doubleAttack + "\n");
+            writer.write("Can Revive: " + this.canRevive + "\n");
+            writer.write("Item Spawn Rate: " + this.itemSpawnRate + "\n");
+            writer.write("Inventory: " + inventoryToString(this.inventory) + "\n");
+            writer.write("Equipped Keepsake: " + (this.equippedKeepsake != null ? this.equippedKeepsake.toString() : "None") + "\n");
+        } catch (IOException e) {
+            System.err.println("An error occurred while saving player data.");
+            e.printStackTrace();
+        }
+    }
 
+    private String inventoryToString(List<Item> inventory) {
+        StringBuilder sb = new StringBuilder();
+        for (Item item : inventory) {
+            sb.append(item.toString()).append(", ");
+        }
+        return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "Empty"; // Remove last comma and space
+    }
 
+    // Method to read player data from a file
+    public void loadPlayerData(String fileName) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(": ");
+                if (parts.length < 2) continue; // Skip lines that don't have the expected format
+                String key = parts[0].trim();
+                String value = parts[1].trim();
+                switch (key) {
+                    case "Name":
+                        this.name = value;
+                        break;
+                    case "Current Health":
+                        this.currentHealth = Integer.parseInt(value);
+                        break;
+                    case "Max Health":
+                        this.maxHealth = Integer.parseInt(value);
+                        break;
+                    case "Attack Power":
+                        this.attackPower = Integer.parseInt(value);
+                        break;
+                    case "Defense":
+                        this.defense = Integer.parseInt(value);
+                        break;
+                    case "Crit Multiplier":
+                        this.critMultiplier = Double.parseDouble(value);
+                        break;
+                    case "Critical Damage Multiplier":
+                        this.criticalDamageMultiplier = Double.parseDouble(value);
+                        break;
+                    case "Reflect Damage":
+                        this.reflectDamage = Integer.parseInt(value);
+                        break;
+                    case "Heal Per Turn":
+                        this.healPerTurn = Integer.parseInt(value);
+                        break;
+                    case "Life Steal":
+                        this.lifeSteal = Boolean.parseBoolean(value);
+                        break;
+                    case "Has Extra Actions":
+                        this.hasExtraActions = Boolean.parseBoolean(value);
+                        break;
+                    case "Double Attack":
+                        this.doubleAttack = Boolean.parseBoolean(value);
+                        break;
+                    case "Can Revive":
+                        this.canRevive = Boolean.parseBoolean(value);
+                        break;
+                    case "Item Spawn Rate":
+                        this.itemSpawnRate = Integer.parseInt(value);
+                        break;
+                    case "Inventory":
+                        this.inventory = stringToInventory(value);
+                        break;
+                    case "Equipped Keepsake":
+                        // Assuming you have a method to parse or find an item by its string representation
+                        this.equippedKeepsake = value.equals("None") ? null : findItemByName(value);
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("An error occurred while loading player data.");
+            e.printStackTrace();
+        }
+    }
+
+    private List<Item> stringToInventory(String inventoryStr) {
+        List<Item> inventory = new ArrayList<>();
+        if (!inventoryStr.equals("Empty")) {
+            String[] items = inventoryStr.split(", ");
+            for (String itemName : items) {
+                // Assuming you have a method to parse or find an item by its string representation
+                Item item = findItemByName(itemName.trim());
+                if (item != null) {
+                    inventory.add(item);
+                }
+            }
+        }
+        return inventory;
+    }
+
+    private Item findItemByName(String name) {
+        // Implementation to find and return the item by its name
+        return null; // Placeholder return
+    }
 }
 

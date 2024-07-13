@@ -1,0 +1,16 @@
+Name: Player
+Current Health: 20
+Max Health: 20
+Attack Power: 1
+Defense: 0
+Crit Multiplier: 0.05
+Critical Damage Multiplier: 1.0
+Reflect Damage: 0
+Heal Per Turn: 0
+Life Steal: false
+Has Extra Actions: false
+Double Attack: false
+Can Revive: false
+Item Spawn Rate: 0
+Inventory: Empty
+Equipped Keepsake: None

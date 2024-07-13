@@ -2,6 +2,7 @@ package com.example.roguelike;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,11 +29,17 @@ public class CombatScreenController {
     @FXML
     private Button runButton;
     @FXML
+    private Text levelIndicator;
+
+    //Test Buttons
+    @FXML
     private Button testButton;
     @FXML
     private Button endTestButton;
     @FXML
     private Button defeatTest;
+    @FXML
+    private Button takeDamageButton;
 
     //QTE Elements
     @FXML
@@ -73,6 +80,7 @@ public class CombatScreenController {
         
         //Level Initialization
         level = new Level();
+        levelIndicator.setText("Level " + level.getLevel());
         
         //Spawns the Enemy
         spawnEnemy();
@@ -87,7 +95,7 @@ public class CombatScreenController {
         runButton.setOnAction(event -> escapeEncounter());
 
         //Player Linking
-        player = new Player("Player", 100, 1, 0);
+        player = new Player("playerData.txt");
         playerHealthBar.setProgress(player.getCurrentHealth() / player.getMaxHealth());
         playerHitIndicator.setVisible(false);
 
@@ -110,6 +118,7 @@ public class CombatScreenController {
         testButton.setOnAction(event -> afterCombat());
         endTestButton.setOnAction(event -> winGame());
         defeatTest.setOnAction(event -> defeated());
+        takeDamageButton.setOnAction(event -> player.takeDamage(5));
     }
 
     private void updatePlayerGUI(){
@@ -155,14 +164,15 @@ public class CombatScreenController {
 
         //Randomize green and yellow positions
         double greenStart = rand.nextDouble() * (totalWidth - critWidth);
-        double yellowStart;
-        do{
-            yellowStart = rand.nextDouble() * (totalWidth - regularHitWidth);
-        } while (Math.abs(yellowStart - greenStart) < critWidth + regularHitWidth && yellowStart < greenStart + critWidth); //Ensure the zones don't overlap
+        double yellowStart = (totalWidth - regularHitWidth) / 2;
 
+        do{
+            greenStart = rand.nextDouble() * (totalWidth - critWidth);
+        } while (Math.abs(yellowStart - greenStart) < critWidth + regularHitWidth && yellowStart < greenStart + critWidth); 
+        
         //Make sure that thezones stay within the bounds PLEASE PLEASE PLEASE STAY WITHIN THE BOUNDS I BEG YOU PLEASE
         greenStart = Math.max(0, Math.min(greenStart, totalWidth - critWidth));
-        yellowStart = Math.max(0, Math.min(yellowStart, totalWidth - regularHitWidth));
+        
 
         greenZone.setWidth(critWidth);
         greenZone.setHeight(qtePane.getHeight());
@@ -249,7 +259,7 @@ public class CombatScreenController {
 
     private void defeated() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatedScreen.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) attackButton.getScene().getWindow();
             stage.setScene(scene);
@@ -273,6 +283,7 @@ public class CombatScreenController {
     }
 
     private void escapeEncounter() {
+        //TODO Implement the escape function
     }
 
     private void enemyAttack() {
@@ -286,12 +297,12 @@ public class CombatScreenController {
     }
 
     private void enemyHitUpdate(String action) {
-        switch (action){
-            case "Attack":
+        switch (action.toLowerCase()){
+            case "attack":
                 enemyHitIndicator.setText("Enemy Attacked for " + enemy.getAttackPower());
                 enemyHitIndicator.setVisible(true);
                 break;
-            case "Block":
+            case "block":
                 enemyHitIndicator.setText("Enemy Blocked");
                 enemyHitIndicator.setVisible(true);
                 break;
@@ -323,11 +334,17 @@ public class CombatScreenController {
     }
 
     public void afterCombat(){
+        player.savePlayerData(); //save data before leaving
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RewardsScreen.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) attackButton.getScene().getWindow();
             stage.setScene(scene);
+
+            //Increment level by 1
+            level.levelup();
+
+            Platform.runLater(() -> levelIndicator.setText("Level " + level.getLevel()));
         } catch (IOException e){
             e.printStackTrace();
         }

@@ -19,6 +19,8 @@ public class MainMenuController {
     private Button optionsButton;
     @FXML
     private Button exitButton;
+
+    Player player;
     
     @FXML
     public void initialize(){
@@ -48,6 +50,9 @@ public class MainMenuController {
 
     private void startGame() {
         //Start Game Code Here
+        player = new Player("Player", 20, 1, 0);
+        player.savePlayerData();
+
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StartGameScreen.fxml"));
             Scene scene = new Scene(loader.load());

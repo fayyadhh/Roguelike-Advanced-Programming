@@ -25,12 +25,14 @@
       </ImageView>
       <ProgressBar fx:id="playerHealthBar" layoutX="62.0" layoutY="107.0" prefWidth="200.0" progress="0.0" />
       <ProgressBar fx:id="enemyHealthBar" layoutX="340.0" layoutY="181.0" prefHeight="15.0" prefWidth="132.0" progress="0.0" />
-      <Button fx:id="testButton" layoutX="297.0" layoutY="26.0" mnemonicParsing="false" text="test button" />
+      <Button fx:id="testButton" layoutX="442.0" layoutY="70.0" mnemonicParsing="false" text="test button" />
       <Button fx:id="endTestButton" layoutX="438.0" layoutY="2.0" mnemonicParsing="false" text="end game" />
       <Button fx:id="defeatTest" layoutX="446.0" layoutY="34.0" mnemonicParsing="false" text="die lol" />
       <StackPane fx:id="qtePane" layoutX="13.0" layoutY="270.0" prefHeight="116.0" prefWidth="572.0" />
       <Text fx:id="playerHitIndicator" layoutX="151.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <Text fx:id="enemyName" layoutX="395.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <Text fx:id="enemyHitIndicator" layoutX="395.0" layoutY="179.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="levelIndicator" layoutX="289.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Button fx:id="takeDamageButton" layoutX="442.0" layoutY="113.0" mnemonicParsing="false" text="take damage" />
    </children>
 </AnchorPane>
