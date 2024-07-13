@@ -41,10 +41,15 @@ public class CombatScreen {
             }
     
             if(p.isLifeSteal()){
+<<<<<<< Updated upstream
                 double lifesteal = attackpower * 0.25;
                 int health = p.getHealth();
+=======
+                double lifesteal = outputpower * 0.25;
+                int health = p.getCurrentHealth();
+>>>>>>> Stashed changes
                 int total = (int)lifesteal + health;
-                p.setHealth(total);
+                p.setCurrentHealth(total);
             }
     
             if(p.getReflectDamage() > 0){
@@ -103,13 +108,13 @@ public class CombatScreen {
 
     private void playerAttacked(int enemyAttack) {
         try {
-            int playerHealth = p.getHealth();
+            int playerHealth = p.getCurrentHealth();
             int playerDefense = p.getDefense();
             int totaldamage = enemyAttack - playerDefense;
             if (totaldamage < 0) { 
                 totaldamage = 0;
             }
-            p.setHealth(playerHealth - totaldamage);
+            p.setCurrentHealth(playerHealth - totaldamage);
             System.out.println("Player got attacked for " + totaldamage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,12 +125,16 @@ public class CombatScreen {
     private void Round(){
         try {
             System.out.println("Round = " + level.getRound());
-            System.out.println("Player HP: " + p.getHealth());
+            System.out.println("Player HP: " + p.getCurrentHealth());
             System.out.println("Enemy HP: " + m.getHealth());
             level.roundUp();
         } catch (Exception e){
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+    }
+
+    public boolean isEnemyDead(){
+        return m.isDead();
     }
 }

@@ -12,7 +12,7 @@
       <Button fx:id="attackButton" layoutX="67.0" layoutY="333.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="95.0" text="Attack" />
       <Button fx:id="itemsButton" layoutX="253.0" layoutY="333.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="95.0" text="Items" />
       <Button fx:id="runButton" layoutX="432.0" layoutY="333.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="95.0" text="Run" />
-      <ImageView fx:id="playerImageView" fitHeight="150.0" fitWidth="95.0" layoutX="115.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="playerImage" fitHeight="150.0" fitWidth="95.0" layoutX="115.0" layoutY="125.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../assets/playerPlaceholder.png" />
          </image>

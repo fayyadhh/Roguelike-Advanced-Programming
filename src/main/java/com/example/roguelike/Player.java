@@ -5,14 +5,15 @@ import java.util.List;
 
 public class Player {
     private String name;
-    private int health;
+    private int currentHealth;
+    private int maxHealth;
     private int attackPower;
     private int defense;
     private List<Item> inventory;
     private Item equippedKeepsake;
 
     // Attributes to support item effects
-    private int criticalAreaSize;
+    private double critMultiplier;
     private double criticalDamageMultiplier;
     private int reflectDamage;
     private int healPerTurn;
@@ -25,13 +26,14 @@ public class Player {
     // Constructor
     public Player(String name, int health, int attackPower, int defense) {
         this.name = name;
-        this.health = health;
+        this.currentHealth = health;
+        this.maxHealth = health;
         this.attackPower = attackPower;
         this.defense = defense;
         this.inventory = new ArrayList<>();
         this.equippedKeepsake = null;
 
-        this.criticalAreaSize = 0; //TODO set this to a good value
+        this.critMultiplier = 0.05; //TODO set this to a good value
         this.criticalDamageMultiplier = 1.0;
         this.reflectDamage = 0;
         this.healPerTurn = 0;
@@ -51,12 +53,16 @@ public class Player {
         this.name = name;
     }
 
-    public int getHealth() {
-        return health;
+    public int getCurrentHealth() {
+        return currentHealth;
     }
 
-    public void setHealth(int health) {
-        this.health = health;
+    public int getMaxHealth(){
+        return maxHealth;
+    }
+
+    public void setCurrentHealth(int health) {
+        this.currentHealth = health;
     }
 
     public int getAttackPower() {
@@ -91,12 +97,12 @@ public class Player {
         this.equippedKeepsake = equippedKeepsake;
     }
 
-    public int getCriticalAreaSize() {
-        return criticalAreaSize;
+    public double getCritMultiplier() {
+        return critMultiplier;
     }
 
-    public void setCriticalAreaSize(int criticalAreaSize) {
-        this.criticalAreaSize = criticalAreaSize;
+    public void setCritMultiplier(double critMultiplier) {
+        this.critMultiplier = critMultiplier;
     }
 
     public double getCriticalDamageMultiplier() {
@@ -165,18 +171,26 @@ public class Player {
     public void attack(Enemy enemy) {
         int damage = attackPower - enemy.getDefense();
         if (damage > 0) {
-            //enemy.takeDamage(damage); TODO implement enemy.takedamage
+            //enemy.takeDamage(damage); This is done in the combat screen
         }
     }
 
     public void takeDamage(int amount) {
         int damage = amount - defense;
         if (damage > 0) {
-            health -= damage;
-            if (health < 0) {
-                health = 0;
+            currentHealth -= damage;
+            if (currentHealth < 0) {
+                currentHealth = 0;
             }
         }
+        checkPlayerDead();
+    }
+
+    public boolean checkPlayerDead(){
+        if(currentHealth <= 0){
+            return true;
+        }
+        return false;
     }
 
     public void useItem(Item item) {
@@ -190,27 +204,28 @@ public class Player {
         equippedKeepsake = item;
     }
 
-    public void completeSkillCheck(boolean success, Enemy enemy) {
-        if (success) {
-            // Double damage to the enemy on successful skill check
-            int criticalDamage = attackPower * 2 - enemy.getDefense();
-            if (criticalDamage > 0) {
-                //enemy.takeDamage(criticalDamage); TODO implement enemy.takedamage
-            }
-        } else {
-            // Double damage taken by player on failed skill check
-            int criticalDamageTaken = attackPower * 2 - defense;
-            if (criticalDamageTaken > 0) {
-                health -= criticalDamageTaken;
-                if (health < 0) {
-                    health = 0;
-                }
-            }
-        }
-    }
+    // public void completeSkillCheck(boolean success, Enemy enemy) {
+    //     if (success) {
+    //         // Double damage to the enemy on successful skill check
+    //         int criticalDamage = attackPower * 2 - enemy.getDefense();
+    //         if (criticalDamage > 0) {
+    //             //enemy.takeDamage(criticalDamage); 
+    //         }
+    //     } else {
+    //         // Double damage taken by player on failed skill check
+    //         int criticalDamageTaken = attackPower * 2 - defense;
+    //         if (criticalDamageTaken > 0) {
+    //             health -= criticalDamageTaken;
+    //             if (health < 0) {
+    //                 health = 0;
+    //             }
+    //         }
+    //     }
+    // } this is also done in the combat screen
+
     public void DisplayPlayer(Player p1){
         System.out.println("Player Name: " + p1.getName());
-        System.out.println("Player Health: " + p1.getHealth());
+        System.out.println("Player Health: " + p1.getCurrentHealth());
         System.out.println("Player Attack Power: " + p1.getAttackPower());
         System.out.println("Player Defense: " + p1.getDefense());
         System.out.println("Player Inventory: " + p1.getInventory());
