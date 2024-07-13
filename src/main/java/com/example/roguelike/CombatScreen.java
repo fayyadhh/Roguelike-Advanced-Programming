@@ -8,6 +8,7 @@ public class CombatScreen {
     Level level = new Level();
     Enemy m;
     Player p;
+
     public CombatScreen(){
         try {
             if (level.level == 0 && level.round == 0){
@@ -25,23 +26,23 @@ public class CombatScreen {
         }
     }
 
-    public void Attacked(){
+    public void Attacked(int damage){
         try {
-            Random random = new Random();
-            int crit = random.nextInt(100) + 1;
-            int attackpower = p.getAttackPower();
-            int critChance = p.getCriticalAreaSize();
-            double critDam = p.getCriticalDamageMultiplier();
-            int outputpower = attackpower;
+//            Random random = new Random();
+//            int crit = random.nextInt(100) + 1;
+//            int attackpower = p.getAttackPower();
+//            int critChance = p.getCriticalAreaSize();
+//            double critDam = p.getCriticalDamageMultiplier();
+            int outputpower = damage;
     
-            if (critChance != 0){
-                if (crit <= critChance){
-                    outputpower *= critDam;
-                }
-            }
+//            if (critChance != 0){
+//                if (crit <= critChance){
+//                    outputpower *= critDam;
+//                }
+//            }
     
             if(p.isLifeSteal()){
-                double lifesteal = attackpower * 0.25;
+                double lifesteal = outputpower * 0.25;
                 int health = p.getHealth();
                 int total = (int)lifesteal + health;
                 p.setHealth(total);
