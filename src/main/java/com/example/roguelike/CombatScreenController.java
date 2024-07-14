@@ -51,7 +51,7 @@ public class CombatScreenController {
 
     public void initialize(){
         cs = new CombatScreen();
-
+        cs.setCSC(this);
 
         attackButton.setOnAction(event -> handleAttack());
         itemsButton.setOnAction(event -> showItems());
@@ -73,7 +73,7 @@ public class CombatScreenController {
         //Test Buttons
         testButton.setOnAction(event -> afterCombat());
         endTestButton.setOnAction(event -> winGame());
-        defeatTest.setOnAction(event -> defeated());
+        //defeatTest.setOnAction(event -> defeated());
     }
 
     private void handleAttack(){
