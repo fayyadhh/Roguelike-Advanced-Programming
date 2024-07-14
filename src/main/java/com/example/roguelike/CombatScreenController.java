@@ -18,7 +18,10 @@ import java.io.IOException;
 import java.util.Random;
 
 public class CombatScreenController {
-    private CombatScreen cs;
+    public CombatScreen cs;
+    public CombatScreenController csc;
+    public Player player;
+    public Enemy enemy;
     @FXML
     private Button attackButton;
     @FXML
@@ -38,7 +41,6 @@ public class CombatScreenController {
 
 
     //variables
-    private Player player;
     private Timeline qteTimeline;
     private double qtePosition;
 
@@ -172,9 +174,9 @@ public class CombatScreenController {
         checkQTEHit();
     }
 
-    private void defeated() {
+    public void defeated() {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatScreen.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatedScreen.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) attackButton.getScene().getWindow();
             stage.setScene(scene);
@@ -183,7 +185,7 @@ public class CombatScreenController {
         }
     }
 
-    private void winGame() {
+    public void winGame() {
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("VictoryScreen.fxml"));
             Scene scene = new Scene(loader.load());
@@ -194,13 +196,13 @@ public class CombatScreenController {
         }
     }
 
-    private void showItems() {
+    public void showItems() {
     }
 
     private void escapeEncounter() {
     }
 
-    private void attackEnemy(int damage) {
+    public void attackEnemy(int damage) {
         cs.Attacked(damage);
     }
 

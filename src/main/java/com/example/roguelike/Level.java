@@ -19,4 +19,8 @@ public class Level {
     public int roundUp() {
         return round++;
     }
+
+    public void resetRound(){
+        round = 0;
+    }
 }

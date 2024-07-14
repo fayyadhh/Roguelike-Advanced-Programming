@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class CombatScreen {
+    public CombatScreenController csc = new CombatScreenController();
     Level level = new Level();
     Enemy m;
     Player p;
@@ -120,13 +121,30 @@ public class CombatScreen {
 
     private void Round(){
         try {
-            System.out.println("Round = " + level.getRound());
-            System.out.println("Player HP: " + p.getHealth());
-            System.out.println("Enemy HP: " + m.getHealth());
-            level.roundUp();
+            if(p.getHealth() <= 0){
+                System.out.println("Player LOST");
+                csc.defeated();
+            }
+            else if(m.getHealth() <= 0){
+                System.out.println("Stage CLEARED");
+                level.levelup();
+                level.resetRound();
+                csc.winGame();
+            }
+            else{
+                System.out.println("Round = " + level.getRound());
+                System.out.println("Player HP: " + p.getHealth());
+                System.out.println("Enemy HP: " + m.getHealth());
+                level.roundUp();
+            }
+            
         } catch (Exception e){
             e.printStackTrace();
             System.out.println(e.getMessage());
         }
+    }
+
+    public void setCSC(CombatScreenController csc){
+        this.csc = csc;
     }
 }
