@@ -1,6 +1,9 @@
 package com.example.roguelike;
 
+import java.net.URL;
 import java.util.Random;
+
+import javafx.scene.image.Image;
 
 enum EnemyType {
     REGULAR,
@@ -16,6 +19,8 @@ public class Enemy {
     private int attackPower;
     private int defense;
     private EnemyType type;
+
+    private String filePath; //File path to the enemy's sprite
 
     private int blockPreference; //How much the enemy will block if block is chosen
 
@@ -52,6 +57,7 @@ public class Enemy {
     public Enemy spawnRandomBoss(){
         //List of possible bosses that could spawn
         String[] possibleBosses = {"Slime King", "Goblin King", "Skeleton King", "Worm King"}; //Change values in this boss list
+        //TODO revise boss list + give sprites
         
         //Randomly choose a boss from the list
         Random random = new Random();
@@ -86,6 +92,7 @@ public class Enemy {
                 this.maxHealth = 10;
                 this.attackPower = 2;
                 this.blockPreference = 1;
+                this.filePath = "/EnemyAssets/slime.png";
                 // this.rarity = "Common";
                 break;
             case "goblin":
@@ -93,6 +100,7 @@ public class Enemy {
                 this.maxHealth = 15;
                 this.attackPower = 3;
                 this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/Goblin.png";
                 // this.rarity = "Common";
                 break;
             case "skeleton":
@@ -100,6 +108,7 @@ public class Enemy {
                 this.maxHealth = 10;
                 this.attackPower = 3;
                 this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/Skeleton.png";
                 // this.rarity = "Common";
                 break;
             case "worm":
@@ -107,6 +116,7 @@ public class Enemy {
                 this.maxHealth = 10;
                 this.attackPower = 2;
                 this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/worm.png";
                 // this.rarity = "Common";
                 break;
         }
@@ -201,5 +211,18 @@ public class Enemy {
         } else {
             return false;
         }
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public Image getImageForEnemy(Enemy enemy){
+        String imagePath = enemy.getFilePath();
+        URL resourceUrl = getClass().getResource(imagePath);
+        if (resourceUrl == null) {
+            throw new IllegalArgumentException("Resource not found: " + imagePath);
+        }
+        return new Image(resourceUrl.toExternalForm());
     }
 }

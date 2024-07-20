@@ -40,6 +40,8 @@ public class CombatScreenController {
     private Button defeatTest;
     @FXML
     private Button takeDamageButton;
+    @FXML
+    private Button testItemsButton;
 
     //QTE Elements
     @FXML
@@ -60,6 +62,8 @@ public class CombatScreenController {
     private Text enemyName;
     @FXML
     private Text enemyHitIndicator;
+    @FXML
+    private ImageView enemyImage;
 
 
     //variables
@@ -84,10 +88,17 @@ public class CombatScreenController {
         
         //Spawns the Enemy
         spawnEnemy();
+        enemyImage.setImage(enemy.getImageForEnemy(enemy));
+        enemyName.setVisible(true);
+
+        //link the sprite of the enemy to the enemy that spawns
+
+
         enemyHitIndicator.setVisible(false);
-        enemyName.setVisible(false);
 
         //TODO Conditional Statement to switch the enemy sprite based on the enemy that spawns
+        //partially done, but needs to be completed for enemy bosses (as enemy bosses need to be overhauled / rethought / reworked / reimagined / re-everythinged)
+        //no lie half of that was completed by intellisense, and everytime intellisense does something like this, i fall more and more in love with it
 
 
         attackButton.setOnAction(event -> handleAttack());
@@ -119,6 +130,8 @@ public class CombatScreenController {
         endTestButton.setOnAction(event -> winGame());
         defeatTest.setOnAction(event -> defeated());
         takeDamageButton.setOnAction(event -> player.takeDamage(5));
+        testItemsButton.setOnAction(event -> debugDisplayItems());
+
     }
 
     private void updatePlayerGUI(){
@@ -219,7 +232,7 @@ public class CombatScreenController {
     double barStart = qteBar.getTranslateX();
     double barEnd = barStart + qteBar.getWidth();
 
-    double barCenter = qteBar.getTranslateX() + qteBar.getWidth() / 2;
+    double barCenter = qteBar.getTranslateX() + qteBar.getWidth() / 2; //unused But just in case yk (aka im too lazy to delete this)
     double greenStart = greenZone.getTranslateX();
     double greenEnd = greenStart + greenZone.getWidth();
 
@@ -289,6 +302,8 @@ public class CombatScreenController {
     private void enemyAttack() {
         String enemyAction = enemy.enemyTurn();
         enemyHitUpdate(enemyAction);
+        //animate the enemy attacking also maybe???? (depends on if the player gets animated)
+
         updatePlayerGUI();
         
         if(player.checkPlayerDead()){
@@ -315,6 +330,10 @@ public class CombatScreenController {
         // if(cs.isEnemyDead()){
         //     afterCombat();
         // }
+
+        //potential TODO animate the player attacking maybe? 
+
+
 
         player.attack(enemy, attackMultiplier);
 
@@ -347,6 +366,12 @@ public class CombatScreenController {
             Platform.runLater(() -> levelIndicator.setText("Level " + level.getLevel()));
         } catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    private void debugDisplayItems() {
+        for(Item item : player.getInventory()){
+            System.out.println(item.getName());
         }
     }
 }

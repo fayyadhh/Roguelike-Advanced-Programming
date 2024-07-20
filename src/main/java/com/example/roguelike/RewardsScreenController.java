@@ -33,6 +33,9 @@ public class RewardsScreenController {
     //instance of the item manager class
     private ItemManager itemManager = new ItemManager();
 
+    //instance of the player class using the filename constructor
+    private Player player = new Player("playerData.txt");
+
     //local variable for reward money
     //this is just a placeholder for now. to be linked with the money reward
     public int rewardMoney;
@@ -52,15 +55,12 @@ public class RewardsScreenController {
         item4.setImage(itemManager.getImageForItem(randomItems.get(3)));
         item5.setImage(itemManager.getImageForItem(randomItems.get(4)));
 
-        //TODO check if this works please work
-
-
         //Handling what happens when the items get clicked
-        item1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(0));
-        item2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(1));
-        item3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(2));
-        item4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(3));
-        item5.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(4));
+        item1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(0)));
+        item2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(1)));
+        item3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(2)));
+        item4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(3)));
+        item5.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(4)));
 
         //Buttons
         rerollButton.setOnAction(event -> rerollItems());
@@ -81,9 +81,10 @@ public class RewardsScreenController {
     private void rerollItems() {
     }
 
-    private void itemChoose(int rewardIndex) {
+    private void itemChoose(Player player, Item item) {
         //add the chosen image to the player inventory and move on to the next screen
-
+        player.addItemToInventory(item);
+        player.savePlayerData();
 
         //Change screen
         try{

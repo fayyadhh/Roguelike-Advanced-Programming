@@ -53,7 +53,7 @@ public class ItemManager {
         legendaryItems.add(new Item("Totem of Rebirth", "Legendary", "/ItemAssets/TotemofRebirth.png"));
         
         //side note: thank heavens for intellisense holy heck
-        //actual meaningful sidenote: please work
+        //actual meaningful sidenote: please work || side side side note: IT WORKS !!!! 
     }
 
     public List<Item> generateRandomItems() {
@@ -92,5 +92,29 @@ public class ItemManager {
             throw new IllegalArgumentException("Resource not found: " + imagePath);
         }
         return new Image(resourceUrl.toExternalForm());
+    }
+
+    public Item findItemByName(String string){
+        for (Item item : commonItems){
+            if (item.getName().equals(string)){
+                return item;
+            }
+        }
+        for (Item item : uncommonItems){
+            if (item.getName().equals(string)){
+                return item;
+            }
+        }
+        for (Item item : rareItems){
+            if (item.getName().equals(string)){
+                return item;
+            }
+        }
+        for (Item item : legendaryItems){
+            if (item.getName().equals(string)){
+                return item;
+            }
+        }
+        return null;
     }
 }
