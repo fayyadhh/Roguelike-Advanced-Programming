@@ -160,7 +160,7 @@ public class Enemy {
     }
 
     public void attack(){
-        player.takeDamage(attackPower);
+        player.takeDamage(attackPower, this);
     }
 
     public void block(int block){

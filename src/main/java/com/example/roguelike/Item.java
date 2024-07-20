@@ -51,7 +51,7 @@ public class Item {
                 player.setCritMultiplier(player.getCritMultiplier() + 20);
                 break;
             case "Gambler’s Dice":
-                player.setItemSpawnRate(player.getItemSpawnRate() + 5);
+                player.setItemSpawnRate(player.getItemSpawnRate() + 5); //TODO implement increase percentage chance of item spawn
                 break;
             case "Spikes":
                 player.setReflectDamage(2);

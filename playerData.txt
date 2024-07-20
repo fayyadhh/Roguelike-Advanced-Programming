@@ -13,4 +13,3 @@ Double Attack: false
 Can Revive: false
 Item Spawn Rate: 0
 Inventory: Empty
-Equipped Keepsake: None

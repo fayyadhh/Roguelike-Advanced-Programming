@@ -21,14 +21,28 @@ public class MainMenuController {
     private Button exitButton;
 
     Player player;
+    Level level = new Level();
     
     @FXML
     public void initialize(){
         startButton.setOnAction(event -> startGame());
-        continueButton.setOnAction(event -> continueGame());
         catalogButton.setOnAction(event -> openCatalog());
         optionsButton.setOnAction(event -> showOptions());
         exitButton.setOnAction(event -> exitGame());
+
+        
+        //continue button logic is here
+        if(!(level.checkIfDead() && (level.getLevel() > 1))){ //if not dead and its not level 1
+            //change the opacity first
+            continueButton.setOpacity(1);
+            continueButton.setDisable(false);
+            continueButton.setOnAction(event -> continueGame());
+            
+        } else {
+            //continue button should be less opaque if there is no save data
+            continueButton.setOpacity(0.5);
+            continueButton.setDisable(true);
+        }
     }
 
     private void exitGame() {
@@ -46,12 +60,22 @@ public class MainMenuController {
 
     private void continueGame() {
         //Continue Game Code Here
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MapScreen.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) continueButton.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void startGame() {
         //Start Game Code Here
         player = new Player();
         player.savePlayerData();
+
+        level.resetForNewGame();
 
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("StartGameScreen.fxml"));

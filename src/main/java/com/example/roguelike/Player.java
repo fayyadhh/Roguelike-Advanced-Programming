@@ -17,15 +17,26 @@ public class Player {
     private List<Item> inventory;
     private Item equippedKeepsake;
 
-    // Attributes to support item effects - set instantly to base values
+    //Item manager
+    private ItemManager itemManager = new ItemManager();
+
+    //Crit stuff
     private double critMultiplier = 0.05;
     private double criticalDamageMultiplier = 1.5;
-    private int reflectDamage = 0;
-    private int healPerTurn = 0;
-    private boolean lifeSteal = false;
+    
+    // Attributes to support item effects - set instantly to base values
+    private int reflectDamage = 0; //also calculated in player class
+    private int healPerTurn = 0; //done in the combatscreencontroller class
+    private boolean lifeSteal = false; //calculated in player class
+
     private boolean hasExtraActions = false; //CHANGED to a boolean, because the user can only have 1 extra action anyway
-    private boolean doubleAttack = false;
-    private boolean canRevive = false;
+    //NOTE: Right now, this does not do anything... i have no idea how to implement extra actions without overhauling what i did to the player combat...
+    //just kidding i am a god and i can do it. no. i Have done it. (im him)
+    
+    private boolean doubleAttack = false; //done in the combat screen controller
+    private boolean canRevive = false; //done here in the player class WOOHOO I THINK ITS DONE !!!!!! (im him)
+
+    // Item spawn rate
     private int itemSpawnRate;
 
     // Base values for the player
@@ -183,28 +194,47 @@ public class Player {
         if (damage > 0) {
             enemy.takeDamage(damage); //This is done in the combat screen
             //WRONG THIS ISNT DONE IN ATTACK SCREEN BC COMBATSCREEN DOESNT HAVE A USE :SOB:
+            if(lifeSteal){
+                setCurrentHealth(currentHealth + damage/2);
+            }
+
         } else if (damage <= 0) {
             //Miss lol
-            //TODO implement a message for when the player misses
+            
         }
     }//Done in the combat controller
 
-    public void takeDamage(int amount) {
+    public void takeDamage(int amount, Enemy enemy) {
         int damage = amount - defense;
         if (damage > 0) {
             setCurrentHealth(currentHealth - 5);;
             if (currentHealth < 0) {
                 currentHealth = 0;
             }
+            if(getReflectDamage() > 0){
+                enemy.takeDamage(getReflectDamage());
+            }
         }
         checkPlayerDead();
     }
 
     public boolean checkPlayerDead(){
-        if(currentHealth <= 0){
-            return true;
+        //check if can revive first
+        if(canRevive){
+            setCurrentHealth(maxHealth);
+            canRevive = false;
+            //remove the item that is used to revive
+            inventory.remove(itemManager.findItemByName("Totem of Rebirth"));
+
+            return false;
+        } else{
+            //only if you cant revive then check if you are dead
+            if(currentHealth <= 0){
+                return true;
+            }
+            return false;
         }
-        return false;
+
     }
 
     public void useItem(Item item) {
@@ -257,6 +287,16 @@ public class Player {
         updatePlayerStats();
     } //probably not gonna use but just in case we need.
 
+    public void heal(int amount){
+        currentHealth += amount;
+        if(currentHealth > maxHealth){
+            currentHealth = maxHealth;
+        }
+    }
+
+
+
+    //Method to update player stats based on the items in the inventory
     private void updatePlayerStats(){
         resetPlayerStats();
 
@@ -281,8 +321,6 @@ public class Player {
         canRevive = false;
     }
 
-
-
     //Save to file
     public void savePlayerData() {
         String fileName = "playerData.txt";
@@ -302,7 +340,6 @@ public class Player {
             writer.write("Can Revive: " + this.canRevive + "\n");
             writer.write("Item Spawn Rate: " + this.itemSpawnRate + "\n");
             writer.write("Inventory: " + inventoryToString(this.inventory) + "\n");
-            writer.write("Equipped Keepsake: " + (this.equippedKeepsake != null ? this.equippedKeepsake.toString() : "None") + "\n");
         } catch (IOException e) {
             System.err.println("An error occurred while saving player data.");
             e.printStackTrace();
@@ -312,7 +349,7 @@ public class Player {
     private String inventoryToString(List<Item> inventory) {
         StringBuilder sb = new StringBuilder();
         for (Item item : inventory) {
-            sb.append(item.toString()).append(", ");
+            sb.append(item.getName()).append(", ");
         }
         return sb.length() > 0 ? sb.substring(0, sb.length() - 2) : "Empty"; // Remove last comma and space
     }
@@ -372,10 +409,6 @@ public class Player {
                     case "Inventory":
                         this.inventory = stringToInventory(value);
                         break;
-                    case "Equipped Keepsake":
-                        // Assuming you have a method to parse or find an item by its string representation
-                        this.equippedKeepsake = value.equals("None") ? null : findItemByName(value);
-                        break;
                 }
             }
         } catch (IOException e) {
@@ -390,18 +423,13 @@ public class Player {
             String[] items = inventoryStr.split(", ");
             for (String itemName : items) {
                 // Assuming you have a method to parse or find an item by its string representation
-                Item item = findItemByName(itemName.trim());
+                Item item = itemManager.findItemByName(itemName.trim());
                 if (item != null) {
                     inventory.add(item);
                 }
             }
         }
         return inventory;
-    }
-
-    private Item findItemByName(String name) {
-        // Implementation to find and return the item by its name
-        return null; // Placeholder return
     }
 }
 

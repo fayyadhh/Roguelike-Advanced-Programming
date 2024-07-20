@@ -55,6 +55,8 @@ public class CombatScreenController {
     @FXML
     private Text playerHitIndicator;
 
+    private int numOfActions = 0;
+
     //Enemy elements
     @FXML //@FML haha lol 
     private ProgressBar enemyHealthBar;
@@ -129,7 +131,7 @@ public class CombatScreenController {
         testButton.setOnAction(event -> afterCombat());
         endTestButton.setOnAction(event -> winGame());
         defeatTest.setOnAction(event -> defeated());
-        takeDamageButton.setOnAction(event -> player.takeDamage(5));
+        takeDamageButton.setOnAction(event -> player.takeDamage(5, enemy));
         testItemsButton.setOnAction(event -> debugDisplayItems());
 
     }
@@ -159,6 +161,9 @@ public class CombatScreenController {
     }
 
     private void handleAttack(){
+        //action is incremented
+        numOfActions++;
+
         //Show the QTE and begin the Quick Time Event for combat
         qtePane.setVisible(true);
 
@@ -224,48 +229,51 @@ public class CombatScreenController {
     }
 
     private void endQTE(){
-            qtePane.removeEventHandler(MouseEvent.MOUSE_CLICKED, this::handleQTEClick);
-            checkQTEHit();
+        qtePane.removeEventHandler(MouseEvent.MOUSE_CLICKED, this::handleQTEClick);
+        checkQTEHit();
     }
         
     private void checkQTEHit(){
-    double barStart = qteBar.getTranslateX();
-    double barEnd = barStart + qteBar.getWidth();
+        double barStart = qteBar.getTranslateX();
+        double barEnd = barStart + qteBar.getWidth();
 
-    double barCenter = qteBar.getTranslateX() + qteBar.getWidth() / 2; //unused But just in case yk (aka im too lazy to delete this)
-    double greenStart = greenZone.getTranslateX();
-    double greenEnd = greenStart + greenZone.getWidth();
+        double barCenter = qteBar.getTranslateX() + qteBar.getWidth() / 2; //unused But just in case yk (aka im too lazy to delete this)
+        double greenStart = greenZone.getTranslateX();
+        double greenEnd = greenStart + greenZone.getWidth();
 
-    double yellowStart = yellowZone.getTranslateX();
-    double yellowEnd = yellowStart + yellowZone.getWidth();
+        double yellowStart = yellowZone.getTranslateX();
+        double yellowEnd = yellowStart + yellowZone.getWidth();
 
-    double attackMultiplier;
+        double attackMultiplier;
 
-    if(barStart <= greenEnd && barEnd >= greenStart){
-        //Crit Damage
-        attackMultiplier = 1.5; //For now setting this to 50, but i'll change so that it does crit damage.
-        playerHitIndicator.setText("CRIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
+        if(barStart <= greenEnd && barEnd >= greenStart){
+            //Crit Damage
+            attackMultiplier = 1.5; //For now setting this to 50, but i'll change so that it does crit damage.
+            playerHitIndicator.setText("CRIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
 
-    } else if (barStart <= yellowEnd && barEnd >= yellowStart){
-        //Regular Hit
-        attackMultiplier = 1; //same as above. change later
-        playerHitIndicator.setText("HIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
-    } else{
-        attackMultiplier = 0; //Miss lol
-        playerHitIndicator.setText("MISS! Better Luck Next Time");
-    }
+        } else if (barStart <= yellowEnd && barEnd >= yellowStart){
+            //Regular Hit
+            attackMultiplier = 1; //same as above. change later
+            playerHitIndicator.setText("HIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
+        } else{
+            attackMultiplier = 0; //Miss lol
+            playerHitIndicator.setText("MISS! Better Luck Next Time");
+        }
 
-    attackEnemy(attackMultiplier);
-     
-    qtePane.setVisible(false);
+        attackEnemy(attackMultiplier);
+        
+        qtePane.setVisible(false);
 
-    playerHitIndicator.setVisible(true);
+        playerHitIndicator.setVisible(true);
 
-    attackButton.setVisible(true);
-    itemsButton.setVisible(true);
-    runButton.setVisible(true);
+        attackButton.setVisible(true);
+        itemsButton.setVisible(true);
+        runButton.setVisible(true);
 
-    enemyAttack();
+        //if the player has extra actions, then only after the second action will the enemy attack
+        if(player.checkExtraActions() && numOfActions > 1){
+            enemyAttack();
+        }
     }
 
     
@@ -325,17 +333,21 @@ public class CombatScreenController {
     }
 
     private void attackEnemy(double attackMultiplier) {
-        // cs.Attacked(damage);
-
-        // if(cs.isEnemyDead()){
-        //     afterCombat();
-        // }
-
         //potential TODO animate the player attacking maybe? 
 
-
+        //check player item stats
+        if(player.isDoubleAttack()){
+            //literally a second attack so im just gonna copy paste whatever is below
+            player.attack(enemy, attackMultiplier);
+            if(player.getHealPerTurn() > 0){
+                player.heal(player.getHealPerTurn());
+            }
+        }
 
         player.attack(enemy, attackMultiplier);
+        if(player.getHealPerTurn() > 0){
+            player.heal(player.getHealPerTurn());
+        }
 
         updateEnemyGUI();
 
