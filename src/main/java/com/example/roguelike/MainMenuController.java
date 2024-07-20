@@ -50,7 +50,7 @@ public class MainMenuController {
 
     private void startGame() {
         //Start Game Code Here
-        player = new Player("Player", 20, 1, 0);
+        player = new Player();
         player.savePlayerData();
 
         try{

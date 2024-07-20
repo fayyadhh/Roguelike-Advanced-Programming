@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class RewardsScreenController {
     @FXML
@@ -29,6 +30,9 @@ public class RewardsScreenController {
     @FXML
     private Button skipButton;
 
+    //instance of the item manager class
+    private ItemManager itemManager = new ItemManager();
+
     //local variable for reward money
     //this is just a placeholder for now. to be linked with the money reward
     public int rewardMoney;
@@ -36,17 +40,27 @@ public class RewardsScreenController {
     public void initialize(){
         //Handle what the screen will show upon completion
         rewardMoneyIndicator.setText("$" + Integer.toString(rewardMoney));
+
+        //genearte tha random items
+        List<Item> randomItems = itemManager.generateRandomItems();
+
+
         //Setting the images for the items
-        //item1.setImage();
-        //TODO make it so that the item image will show the correct item that is available.. idk how to do that yet but this is a placeholder !!!!
+        item1.setImage(itemManager.getImageForItem(randomItems.get(0)));
+        item2.setImage(itemManager.getImageForItem(randomItems.get(1)));
+        item3.setImage(itemManager.getImageForItem(randomItems.get(2)));
+        item4.setImage(itemManager.getImageForItem(randomItems.get(3)));
+        item5.setImage(itemManager.getImageForItem(randomItems.get(4)));
+
+        //TODO check if this works please work
 
 
         //Handling what happens when the items get clicked
-        item1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(item1));
-        item2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(item2));
-        item3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(item3));
-        item4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(item4));
-        item5.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(item5));
+        item1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(0));
+        item2.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(1));
+        item3.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(2));
+        item4.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(3));
+        item5.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(4));
 
         //Buttons
         rerollButton.setOnAction(event -> rerollItems());
@@ -67,8 +81,9 @@ public class RewardsScreenController {
     private void rerollItems() {
     }
 
-    private void itemChoose(ImageView item) {
+    private void itemChoose(int rewardIndex) {
         //add the chosen image to the player inventory and move on to the next screen
+
 
         //Change screen
         try{

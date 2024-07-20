@@ -3,19 +3,22 @@ package com.example.roguelike;
 
 public class Item {
     private String name;
-    private double price;
-    private String effect;
-    private String rarity;
+    // private double price; 
+    // private String effect; this effect variable doesnt need to be used, since why do we have a string telling the effect when we're just searching for the item name to give the effect anyways
 
-    public Item(String name,String rarity, double price,String effect) {
+    private String rarity;
+    private String filePath;
+
+    public Item(String name,String rarity, String filePath) {
         this.name = name;
-        this.price = price;
-        this.effect = effect;
         this.rarity = rarity;
+        this.filePath = filePath;
     }
+
     // Method to apply the effect of the item to the player
-    public void applyEffect(Player player) {
-        switch (name) {
+    //i think this is an ineffecient method, but we roll with it :100:
+    public void applyEffect(Player player, Item item) {
+        switch (item.getName()) {
             case "Leather Chestplate":
                 player.setDefense(player.getDefense() + 5);
                 break;
@@ -26,10 +29,10 @@ public class Item {
                 player.setMaxHealth(player.getMaxHealth() + 10);
                 break;
             case "Glasses":
-                player.setCriticalAreaSize(player.getCriticalAreaSize() + 10);
+                player.setCritMultiplier(player.getCritMultiplier() + 0.1);
                 break;
             case "Potion":
-                player.setHealth(player.getHealth() + 20);
+                player.setMaxHealth(player.getMaxHealth() + 20);
                 break;
             case "Whetstone":
                 player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 0.05);
@@ -42,10 +45,10 @@ public class Item {
                 break;
             case "Magic Charm":
                 player.setDefense(player.getDefense() + 5);
-                player.setHealth(player.getHealth() + 20);
+                player.setMaxHealth(player.getMaxHealth() + 20);
                 break;
             case "Ninja Belt":
-                player.setCriticalAreaSize(player.getCriticalAreaSize() + 20);
+                player.setCritMultiplier(player.getCritMultiplier() + 20);
                 break;
             case "Gambler’s Dice":
                 player.setItemSpawnRate(player.getItemSpawnRate() + 5);
@@ -62,7 +65,7 @@ public class Item {
                 player.setLifeSteal(true);
                 break;
             case "Sniper Lens":
-                player.setCriticalAreaSize(player.getCriticalAreaSize() + 30);
+                player.setCritMultiplier(player.getCritMultiplier() + 30);
                 player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 0.1);
                 break;
             case "Spiky Shield":
@@ -77,7 +80,7 @@ public class Item {
             case "Holy Concoction":
                 player.setDefense(player.getDefense() + 20);
                 player.setAttackPower(player.getAttackPower() + 10);
-                player.setHealth(player.getHealth() + 50);
+                player.setMaxHealth(player.getMaxHealth() + 50);
                 break;
             case "Totem of Rebirth":
                 player.setCanRevive(true);
@@ -86,45 +89,50 @@ public class Item {
                 System.out.println("Unknown item effect");
         }
     }
-    @Override
-    public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", effect='" + effect + '\'' +
-                '}';
-    }
+
+    // @Override
+    // public String toString() {
+    //     return "Item{" +
+    //             "name='" + name + '\'' +
+    //             ", effect='" + effect + '\'' +
+    //             '}';
+    // }
 
     public String getName() {
         return name;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    // public double getPrice() {
+    //     return price;
+    // }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    // public void setPrice(double price) {
+    //     this.price = price;
+    // }
 
 
     public String getRarity() {
         return rarity;
     }
 
-    public String getEffect() {
-        return effect;
-    }
+    // public String getEffect() {
+    //     return effect;
+    // }
 
 
     public void setRarity(String rarity) {
         this.rarity = rarity;
     }
 
-    public void setEffect(String effect) {
-        this.effect = effect;
+    // public void setEffect(String effect) {
+    //     this.effect = effect;
+    // }
+
+    public String getFilePath() {
+        return filePath;
     }
 }

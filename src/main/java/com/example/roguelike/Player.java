@@ -17,40 +17,35 @@ public class Player {
     private List<Item> inventory;
     private Item equippedKeepsake;
 
-    // Attributes to support item effects
-    private double critMultiplier;
-    private double criticalDamageMultiplier;
-    private int reflectDamage;
-    private int healPerTurn;
-    private boolean lifeSteal;
-    private boolean hasExtraActions; //CHANGED to a boolean, because the user can only have 1 extra action anyway
-    private boolean doubleAttack;
-    private boolean canRevive;
+    // Attributes to support item effects - set instantly to base values
+    private double critMultiplier = 0.05;
+    private double criticalDamageMultiplier = 1.5;
+    private int reflectDamage = 0;
+    private int healPerTurn = 0;
+    private boolean lifeSteal = false;
+    private boolean hasExtraActions = false; //CHANGED to a boolean, because the user can only have 1 extra action anyway
+    private boolean doubleAttack = false;
+    private boolean canRevive = false;
     private int itemSpawnRate;
 
+    // Base values for the player
+    private final int baseHealth = 20;
+    private final int baseAttackPower = 1;
+    private final int baseDefense = 0;
+
     // Constructor
-    public Player(String fileName) {
+    public Player(String fileName) { //constructor used to load an existing player
         loadPlayerData(fileName);
     }
 
-    public Player(String name, int health, int attackPower, int defense) {
-        this.name = name;
-        this.currentHealth = health;
-        this.maxHealth = health;
-        this.attackPower = attackPower;
-        this.defense = defense;
+    public Player() { //constructur to make a new player
+        this.name = "Player";
+        this.currentHealth = baseHealth;
+        this.maxHealth = baseHealth;
+        this.attackPower = baseAttackPower;
+        this.defense = baseDefense;
         this.inventory = new ArrayList<>();
-        this.equippedKeepsake = null;
-
-        this.critMultiplier = 0.05; //TODO set this to a good value
-        this.criticalDamageMultiplier = 1.0;
-        this.reflectDamage = 0;
-        this.healPerTurn = 0;
-        this.lifeSteal = false;
-        this.hasExtraActions = false;
-        this.doubleAttack = false;
-        this.canRevive = false;
-        this.itemSpawnRate = 0;
+        this.equippedKeepsake = null; //equpped keepsake doesnt need to be used, but just have it in case it messes up any of the code
     }
 
     // Getters and Setters
@@ -172,7 +167,9 @@ public class Player {
 
     public void setCanRevive(boolean canRevive) {
         this.canRevive = canRevive;
-    }   public int getItemSpawnRate() {
+    }   
+    
+    public int getItemSpawnRate() {
         return itemSpawnRate;
     }
 
@@ -190,7 +187,7 @@ public class Player {
             //Miss lol
             //TODO implement a message for when the player misses
         }
-    }
+    }//Done in the combat controller
 
     public void takeDamage(int amount) {
         int damage = amount - defense;
@@ -212,7 +209,7 @@ public class Player {
 
     public void useItem(Item item) {
         if (inventory.contains(item)) {
-            item.applyEffect(this);
+            item.applyEffect(this, item);
             inventory.remove(item);
         }
     }
@@ -249,10 +246,42 @@ public class Player {
         System.out.println("Player Equipped Keepsake: " + p1.getEquippedKeepsake());
     }
 
-    //Methods created by Parishad:
+    //Methods for items:
     public void addItemToInventory(Item item) {
         inventory.add(item);
+        updatePlayerStats();
     }
+
+    public void removeItemFromInventory(Item item) {
+        inventory.remove(item);
+        updatePlayerStats();
+    } //probably not gonna use but just in case we need.
+
+    private void updatePlayerStats(){
+        resetPlayerStats();
+
+        for (Item item : inventory) {
+            item.applyEffect(this, item);
+        }
+    }
+
+    private void resetPlayerStats(){
+        this.maxHealth = baseHealth;
+        this.attackPower = baseAttackPower;
+        this.defense = baseDefense;
+        
+
+        critMultiplier = 0.05;
+        criticalDamageMultiplier = 1.5;
+        reflectDamage = 0;
+        healPerTurn = 0;
+        lifeSteal = false;
+        hasExtraActions = false;
+        doubleAttack = false;
+        canRevive = false;
+    }
+
+
 
     //Save to file
     public void savePlayerData() {
