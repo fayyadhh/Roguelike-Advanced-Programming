@@ -1,0 +1,16 @@
+Leather Chestplate,Common,/ItemAssets/ChainmailArmor.png,Defense +5,false
+Dull Dagger,Common,/ItemAssets/DullDagger.png,Attack Power +5,false
+Hearty Amulet,Common,/ItemAssets/HeartyAmulet.png,Max Health +10,false
+Glasses,Common,/ItemAssets/Glasses.png,Makes critical hits easier to land,false
+Potion,Common,/ItemAssets/Potion.png,Heal 20 health,false
+Whetstone,Common,/ItemAssets/Whetstone.png,Makes critical hits stronger,false
+Chainmail Armor,Uncommon,/ItemAssets/ChainmailArmor.png,Defense +10,false
+Knight Sword,Uncommon,/ItemAssets/KnightSword.png,Attack Power +10,false
+Ninja Belt,Uncommon,/ItemAssets/NinjaBelt.png,Makes critical hits a lot stronger,false
+Gambler’s Dice,Uncommon,/ItemAssets/GamblersDice.png,Increases the chance of finding rare items,false
+Spikes,Uncommon,/ItemAssets/Spike.png,Reflects some damage back to the enemy,false
+Holy Armor,Rare,/ItemAssets/HolyArmor.png,Defense +15,false
+Sniper Lens,Rare,/ItemAssets/SniperLens.png,Makes critical hits a lot stronger,false
+Spiky Shield,Rare,/ItemAssets/SpikyShield.png,Reflects most damage back to the enemy,false
+Light Speed Bracelet,Legendary,/ItemAssets/LightSpeedBracelet.png,Allows for an extra action in combat,false
+After Image,Legendary,/ItemAssets/AfterImage.png,Attacks twice per turn,false

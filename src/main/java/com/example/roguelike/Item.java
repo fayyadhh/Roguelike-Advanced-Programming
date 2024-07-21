@@ -8,6 +8,8 @@ public class Item {
     //this effect variable doesnt need to be used, since why do we have a string telling the effect when we're just searching for the item name to give the effect anyways
     //nvm i found a use for it :D
 
+    private Boolean isOwned = false; //set to false for each.
+
     private String rarity;
     private String filePath;
 
@@ -131,9 +133,13 @@ public class Item {
         this.rarity = rarity;
     }
 
-    // public void setEffect(String effect) {
-    //     this.effect = effect;
-    // }
+    public Boolean getIsOwned() {
+        return isOwned;
+    }
+
+    public void setIsOwned() {
+        this.isOwned = true;
+    }
 
     public String getFilePath() {
         return filePath;

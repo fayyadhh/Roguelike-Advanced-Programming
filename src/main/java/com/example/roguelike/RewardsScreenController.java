@@ -29,6 +29,8 @@ public class RewardsScreenController {
     private ImageView item4;
     @FXML
     private ImageView item5;
+    private List<ImageView> itemImageViews;
+
     @FXML
     private Button rerollButton;
     @FXML
@@ -51,6 +53,7 @@ public class RewardsScreenController {
     private int rerollCount = 0;
     private int rerollCost = 5 + rerollCount; 
 
+    @FXML
     public void initialize(){
         //Handle what the screen will show upon completion
         rewardMoney = level.getRewardMoney();
@@ -72,6 +75,7 @@ public class RewardsScreenController {
         item3.setImage(itemManager.getImageForItem(randomItems.get(2)));
         item4.setImage(itemManager.getImageForItem(randomItems.get(3)));
         item5.setImage(itemManager.getImageForItem(randomItems.get(4)));
+        itemImageViews = List.of(item1, item2, item3, item4, item5);
 
         //Handling what happens when the items get clicked
         item1.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(0)));
@@ -81,50 +85,15 @@ public class RewardsScreenController {
         item5.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> itemChoose(player, randomItems.get(4)));
 
         //tooltips for items
-        String tooltipText1 = String.format("%s\n%s\n%s",
-            randomItems.get(0).getName(),
-            randomItems.get(0).getRarity(),
-            randomItems.get(0).getEffect()
-        );
-        Tooltip item1Tooltip = new Tooltip(tooltipText1);
-        Tooltip.install(item1, item1Tooltip); //link the tooltip to the item
-        item1Tooltip.setShowDelay(Duration.millis(20)); //just so the popup shows up faster everything is repeated for each item
+        for(int i = 0; i < randomItems.size(); i++){
+            Item currentItem = randomItems.get(i);
+            ImageView currentItemView = itemImageViews.get(i);
 
-        String tooltipText2 = String.format("%s\n%s\n%s",
-            randomItems.get(1).getName(),
-            randomItems.get(1).getRarity(),
-            randomItems.get(1).getEffect()
-        );
-        Tooltip item2Tooltip = new Tooltip(tooltipText2);
-        Tooltip.install(item2, item2Tooltip);
-        item2Tooltip.setShowDelay(Duration.millis(20));
-
-        String tooltipText3 = String.format("%s\n%s\n%s",
-            randomItems.get(2).getName(),
-            randomItems.get(2).getRarity(),
-            randomItems.get(2).getEffect()
-        );
-        Tooltip item3Tooltip = new Tooltip(tooltipText3);
-        Tooltip.install(item3, item3Tooltip);
-        item3Tooltip.setShowDelay(Duration.millis(20));
-
-        String tooltipText4 = String.format("%s\n%s\n%s",
-            randomItems.get(3).getName(),
-            randomItems.get(3).getRarity(),
-            randomItems.get(3).getEffect()
-        );
-        Tooltip item4Tooltip = new Tooltip(tooltipText4);
-        Tooltip.install(item4, item4Tooltip);
-        item4Tooltip.setShowDelay(Duration.millis(20));
-
-        String tooltipText5 = String.format("%s\n%s\n%s",
-            randomItems.get(4).getName(),
-            randomItems.get(4).getRarity(),
-            randomItems.get(4).getEffect()
-        );
-        Tooltip item5Tooltip = new Tooltip(tooltipText5);
-        Tooltip.install(item5, item5Tooltip);
-        item5Tooltip.setShowDelay(Duration.millis(20));
+            String toolTipText = String.format("%s\n%s\n%s", currentItem.getName(), currentItem.getRarity(), currentItem.getEffect());
+            Tooltip currenTooltip = new Tooltip(toolTipText);
+            Tooltip.install(currentItemView, currenTooltip);
+            currenTooltip.setShowDelay(Duration.ZERO);
+        }
 
 
         //Buttons

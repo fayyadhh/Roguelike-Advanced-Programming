@@ -291,6 +291,9 @@ public class Player {
     public void addItemToInventory(Item item) {
         inventory.add(item);
         updatePlayerStats();
+
+        item.setIsOwned(); //makes it so that the item is fully owned
+        itemManager.saveItems(); //saves the item as owned
     }
 
     public void removeItemFromInventory(Item item) {

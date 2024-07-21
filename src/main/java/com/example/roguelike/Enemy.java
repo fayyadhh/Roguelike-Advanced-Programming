@@ -91,6 +91,7 @@ public class Enemy {
         //increase stats per level
         double healthIncreaseModifier = 1.5 * level.getLevel(); //50% per level
         int attackPowerIncreaseModifier = 2 * level.getLevel(); //2 per level
+        int rewardMoneyIncreaseModifier = 1 * level.getLevel(); //1 per level
 
         switch (name.toLowerCase()){
             case "slime":
@@ -99,7 +100,7 @@ public class Enemy {
                 this.attackPower = 2 + attackPowerIncreaseModifier;
                 this.blockPreference = 1;
                 this.filePath = "/EnemyAssets/slime.png";
-                this.rewardMoney = 3;
+                this.rewardMoney = 3 + rewardMoneyIncreaseModifier;
                 // this.rarity = "Common";
                 break;
             case "goblin":
@@ -108,7 +109,7 @@ public class Enemy {
                 this.attackPower = 3 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/Goblin.png";
-                this.rewardMoney = 3;
+                this.rewardMoney = 3 + rewardMoneyIncreaseModifier;
                 // this.rarity = "Common";
                 break;
             case "skeleton":
@@ -117,7 +118,7 @@ public class Enemy {
                 this.attackPower = 3 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/Skeleton.png";
-                this.rewardMoney = 3;
+                this.rewardMoney = 3 + rewardMoneyIncreaseModifier;
                 // this.rarity = "Common";
                 break;
             case "worm":
@@ -126,7 +127,7 @@ public class Enemy {
                 this.attackPower = 2 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/worm.png";
-                this.rewardMoney = 3;
+                this.rewardMoney = 3 + rewardMoneyIncreaseModifier;
                 // this.rarity = "Common";
                 break;
         }
@@ -137,10 +138,50 @@ public class Enemy {
         this.maxHealth = maxHealth * 5; //makes the health of a strong enemy x5
         this.currentHealth = maxHealth;
         this.attackPower = attackPower + 50;
+        this.rewardMoney = rewardMoney + 15;
     }
 
     private void configureBossEnemy(String name){
         //TODO once boss enemies are finalized
+        switch(name.toLowerCase()){
+            case "slime king":
+                this.currentHealth = 100;
+                this.maxHealth = 100;
+                this.attackPower = 10;
+                this.blockPreference = 1;
+                this.filePath = "/EnemyAssets/slimeking.png";
+                this.rewardMoney = 30;
+                // this.rarity = "Rare";
+                break;
+            case "goblin king":
+                this.currentHealth = 150;
+                this.maxHealth = 150;
+                this.attackPower = 15;
+                this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/GoblinKing.png";
+                this.rewardMoney = 30;
+                // this.rarity = "Rare";
+                break;
+            case "skeleton king":
+                this.currentHealth = 100;
+                this.maxHealth = 100;
+                this.attackPower = 15;
+                this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/SkeletonKing.png";
+                this.rewardMoney = 30;
+                // this.rarity = "Rare";
+                break;
+            case "worm king":
+                this.currentHealth = 100;
+                this.maxHealth = 100;
+                this.attackPower = 10;
+                this.blockPreference = 0;
+                this.filePath = "/EnemyAssets/wormking.png";
+                this.rewardMoney = 30;
+                // this.rarity = "Rare";
+                break;
+        }
+        
     }
 
     //Methods for the enemy's turns (i have no idea what im doing im just freeballing rn)

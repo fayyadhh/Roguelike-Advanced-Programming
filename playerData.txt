@@ -3,14 +3,14 @@ Current Health: 20
 Max Health: 20
 Attack Power: 1
 Defense: 0
-Money: 0
+Money: 4
 Crit Multiplier: 0.05
 Critical Damage Multiplier: 1.5
-Reflect Damage: 0
+Reflect Damage: 2
 Heal Per Turn: 0
 Life Steal: false
 Has Extra Actions: false
 Double Attack: false
 Can Revive: false
 Item Spawn Rate: 0
-Inventory: Empty
+Inventory: Spikes

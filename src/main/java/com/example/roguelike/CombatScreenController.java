@@ -79,6 +79,8 @@ public class CombatScreenController {
     private ImageView enemyImage;
     @FXML
     private Text enemyHealthNumbers;
+    @FXML
+    private Text cannotRunText;
 
 
     //variables
@@ -145,7 +147,7 @@ public class CombatScreenController {
         qtePane.setStyle("-fx-background-color: black;");
         qtePane.setVisible(false);
 
-        
+        //hideTestButtons();
 
         //Test Buttons
         testButton.setOnAction(event -> afterCombat());
@@ -154,6 +156,14 @@ public class CombatScreenController {
         takeDamageButton.setOnAction(event -> player.takeDamage(5, enemy));
         testItemsButton.setOnAction(event -> debugDisplayItems());
 
+    }
+
+    private void hideTestButtons(){
+        testButton.setVisible(false);
+        endTestButton.setVisible(false);
+        defeatTest.setVisible(false);
+        takeDamageButton.setVisible(false);
+        testItemsButton.setVisible(false);
     }
 
     private void updatePlayerGUI(){
@@ -171,7 +181,7 @@ public class CombatScreenController {
             case 5:
                 enemy = enemy.spawnRandomEnemy(EnemyType.STRONG);
                 break;
-            case 10:
+            case 0:
                 enemy = enemy.spawnRandomBoss();
                 break;
             default:
@@ -384,6 +394,16 @@ public class CombatScreenController {
             } catch (IOException e){
                 e.printStackTrace();
             }
+        } else{
+            if(level.getLevel() % 10 == 5){
+                //if the level is a strong enemy level, then the player cannot run
+                cannotRunText.setText("Cannot Run from Strong Enemy");
+            } else{
+                //if the level is a boss level, then the player cannot run
+                cannotRunText.setText("Cannot Run from Bosses");
+            }
+            cannotRunText.setVisible(true);
+
         }   
     }
 
@@ -447,18 +467,23 @@ public class CombatScreenController {
 
     public void afterCombat(){
         player.savePlayerData(); //save data before leaving
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("RewardsScreen.fxml"));
-            Scene scene = new Scene(loader.load());
-            Stage stage = (Stage) attackButton.getScene().getWindow();
-            stage.setScene(scene);
 
-            //Increment level by 1
-            level.levelup();
+        if(level.getLevel() != 20){
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("RewardsScreen.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage) attackButton.getScene().getWindow();
+                stage.setScene(scene);
 
-            Platform.runLater(() -> levelIndicator.setText("Level " + level.getLevel()));
-        } catch (IOException e){
-            e.printStackTrace();
+                //Increment level by 1
+                level.levelup();
+
+                Platform.runLater(() -> levelIndicator.setText("Level " + level.getLevel()));
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        } else{
+            winGame();
         }
     }
 

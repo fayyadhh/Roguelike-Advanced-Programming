@@ -1,5 +1,11 @@
 package com.example.roguelike;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,13 +20,29 @@ public class ItemManager {
     private List<Item> rareItems;
     private List<Item> legendaryItems;
 
+    private List<Item> allItems;
+    private String filePath = "items.txt";
+    private File file = new File(filePath);
+
     public ItemManager(){
         commonItems = new ArrayList<>();
         uncommonItems = new ArrayList<>();
         rareItems = new ArrayList<>();
         legendaryItems = new ArrayList<>();
 
-        initializeItems();
+        if(file.exists() && file.length() > 0){
+            loadItems();
+
+            allItems = new ArrayList<>();
+            allItems.addAll(commonItems);
+            allItems.addAll(uncommonItems);
+            allItems.addAll(rareItems);
+            allItems.addAll(legendaryItems);
+        } else {
+            initializeItems();
+        }
+
+        
     }
 
     public void initializeItems(){
@@ -54,6 +76,13 @@ public class ItemManager {
         
         //side note: thank heavens for intellisense holy heck
         //actual meaningful sidenote: please work || side side side note: IT WORKS !!!! 
+        allItems = new ArrayList<>();
+        allItems.addAll(commonItems);
+        allItems.addAll(uncommonItems);
+        allItems.addAll(rareItems);
+        allItems.addAll(legendaryItems);
+
+        saveItems();
     }
 
     public List<Item> generateRandomItems() {
@@ -79,6 +108,10 @@ public class ItemManager {
         }
 
         return randomItems;
+    }
+
+    public List<Item> getAllItems(){
+        return allItems;
     }
 
     public String getImagePath(Item item){
@@ -120,5 +153,60 @@ public class ItemManager {
 
     public String getEffectForItem(Item item){
         return item.getEffect();
+    }
+
+    //save items to a file to keep track of whether each item is owned or not
+    public void saveItems(){
+        String fileName = "items.txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (Item item : allItems) {
+                writer.write(item.getName() + "," + item.getRarity() + "," + item.getFilePath() + "," + item.getEffect() + "," + item.getIsOwned());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadItems(){
+        //TODO
+        String fileName = "items.txt";
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line = reader.readLine();
+            while (line != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    String name = parts[0];
+                    String rarity = parts[1];
+                    String filePath = parts[2];
+                    String effect = parts[3];
+                    boolean isOwned = Boolean.parseBoolean(parts[4]);
+
+                    Item item = findItemByName(name);
+                    if (item == null) {
+                        // Assuming a constructor that takes all properties
+                        item = new Item(name, rarity, filePath, effect);
+                        switch (rarity) {
+                            case "Common":
+                                commonItems.add(item);
+                                break;
+                            case "Uncommon":
+                                uncommonItems.add(item);
+                                break;
+                            case "Rare":
+                                rareItems.add(item);
+                                break;
+                            case "Legendary":
+                                legendaryItems.add(item);
+                                break;
+                        }
+                    }
+                    if (isOwned) { item.setIsOwned(); } //just to set if owned, because it is not owned by default
+                }
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
