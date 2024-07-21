@@ -3,6 +3,7 @@ Current Health: 20
 Max Health: 20
 Attack Power: 1
 Defense: 0
+Money: 0
 Crit Multiplier: 0.05
 Critical Damage Multiplier: 1.5
 Reflect Damage: 0

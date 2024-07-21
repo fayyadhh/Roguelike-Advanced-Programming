@@ -10,6 +10,7 @@ public class Level {
     public int level = 1;
     public int round = 0;
     public boolean isDead = false;
+    public int rewardMoney = 0;
 
     public Enemy currentEnemy; //to use for when enemy data can be saved to level... which idk how to do as of yet... god save me
 
@@ -32,6 +33,14 @@ public class Level {
 
     public boolean checkIfDead(){
         return isDead;
+    }
+
+    public void setRewardMoney(int rewardMoney){
+        this.rewardMoney = rewardMoney;
+    }
+
+    public int getRewardMoney(){
+        return rewardMoney;
     }
 
     // public int getRound(){
@@ -58,6 +67,9 @@ public class Level {
             writer.newLine();
 
             writer.write("IsDead: " + isDead);
+            writer.newLine();
+
+            writer.write("RewardMoney: " + rewardMoney);
             writer.newLine();
 
             //find a way to save the current enemy 4head
@@ -95,6 +107,9 @@ public class Level {
                     isDead = Boolean.parseBoolean(parts[1]);
                 }
                 line = reader.readLine();
+                if (parts[0].equals("RewardMoney")) {
+                    rewardMoney = Integer.parseInt(parts[1]);
+                }
             }
         } catch (IOException e) {
             System.err.println("An error occurred while loading player data.");

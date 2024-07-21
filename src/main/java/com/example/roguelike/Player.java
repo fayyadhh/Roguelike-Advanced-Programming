@@ -16,6 +16,7 @@ public class Player {
     private int defense;
     private List<Item> inventory;
     private Item equippedKeepsake;
+    private int money;
 
     //Item manager
     private ItemManager itemManager = new ItemManager();
@@ -55,6 +56,7 @@ public class Player {
         this.maxHealth = baseHealth;
         this.attackPower = baseAttackPower;
         this.defense = baseDefense;
+        this.money = 0;
         this.inventory = new ArrayList<>();
         this.equippedKeepsake = null; //equpped keepsake doesnt need to be used, but just have it in case it messes up any of the code
     }
@@ -114,6 +116,15 @@ public class Player {
 
     public void setEquippedKeepsake(Item equippedKeepsake) {
         this.equippedKeepsake = equippedKeepsake;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+        savePlayerData();
     }
 
     public double getCritMultiplier() {
@@ -330,6 +341,7 @@ public class Player {
             writer.write("Max Health: " + this.maxHealth + "\n");
             writer.write("Attack Power: " + this.attackPower + "\n");
             writer.write("Defense: " + this.defense + "\n");
+            writer.write("Money: " + this.money + "\n");
             writer.write("Crit Multiplier: " + this.critMultiplier + "\n");
             writer.write("Critical Damage Multiplier: " + this.criticalDamageMultiplier + "\n");
             writer.write("Reflect Damage: " + this.reflectDamage + "\n");
@@ -378,6 +390,9 @@ public class Player {
                         break;
                     case "Defense":
                         this.defense = Integer.parseInt(value);
+                        break;
+                    case "Money":
+                        this.money = Integer.parseInt(value);
                         break;
                     case "Crit Multiplier":
                         this.critMultiplier = Double.parseDouble(value);

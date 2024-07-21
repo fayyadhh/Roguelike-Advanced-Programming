@@ -25,32 +25,32 @@ public class ItemManager {
 
     public void initializeItems(){
         //Adding the common items and stuff
-        commonItems.add(new Item("Leather Chestplate", "Common", "/ItemAssets/ChainmailArmor.png"));
-        commonItems.add(new Item("Dull Dagger", "Common", "/ItemAssets/DullDagger.png"));
-        commonItems.add(new Item("Hearty Amulet", "Common", "/ItemAssets/HeartyAmulet.png"));
-        commonItems.add(new Item("Glasses", "Common", "/ItemAssets/Glasses.png"));
-        commonItems.add(new Item("Potion", "Common", "/ItemAssets/Potion.png"));
-        commonItems.add(new Item("Whetstone", "Common", "/ItemAssets/Whetstone.png"));
+        commonItems.add(new Item("Leather Chestplate", "Common", "/ItemAssets/ChainmailArmor.png", "Defense +5"));
+        commonItems.add(new Item("Dull Dagger", "Common", "/ItemAssets/DullDagger.png", "Attack Power +5"));
+        commonItems.add(new Item("Hearty Amulet", "Common", "/ItemAssets/HeartyAmulet.png", "Max Health +10"));
+        commonItems.add(new Item("Glasses", "Common", "/ItemAssets/Glasses.png", "Makes critical hits easier to land"));
+        commonItems.add(new Item("Potion", "Common", "/ItemAssets/Potion.png", "Heal 20 health"));
+        commonItems.add(new Item("Whetstone", "Common", "/ItemAssets/Whetstone.png", "Makes critical hits stronger"));
 
         //Adding the uncommon items blah blah
-        uncommonItems.add(new Item("Chainmail Armor", "Uncommon", "/ItemAssets/ChainmailArmor.png"));
-        uncommonItems.add(new Item("Knight Sword", "Uncommon", "/ItemAssets/KnightSword.png"));
-        uncommonItems.add(new Item("Magic Charm", "Uncommon", "/ItemAssets/MagicCharm.png"));
-        uncommonItems.add(new Item("Ninja Belt", "Uncommon", "/ItemAssets/NinjaBelt.png"));
-        uncommonItems.add(new Item("Gambler’s Dice", "Uncommon", "/ItemAssets/GamblersDice.png"));
-        uncommonItems.add(new Item("Spikes", "Uncommon", "/ItemAssets/Spike.png"));
+        uncommonItems.add(new Item("Chainmail Armor", "Uncommon", "/ItemAssets/ChainmailArmor.png", "Defense +10"));
+        uncommonItems.add(new Item("Knight Sword", "Uncommon", "/ItemAssets/KnightSword.png", "Attack Power +10"));
+        uncommonItems.add(new Item("Magic Charm", "Uncommon", "/ItemAssets/MagicCharm.png", "Defense +5, Max Health +20"));
+        uncommonItems.add(new Item("Ninja Belt", "Uncommon", "/ItemAssets/NinjaBelt.png", "Makes critical hits a lot stronger"));
+        uncommonItems.add(new Item("Gambler’s Dice", "Uncommon", "/ItemAssets/GamblersDice.png", "Increases the chance of finding rare items"));
+        uncommonItems.add(new Item("Spikes", "Uncommon", "/ItemAssets/Spike.png", "Reflects some damage back to the enemy"));
 
         //rares
-        rareItems.add(new Item("Holy Armor", "Rare", "/ItemAssets/HolyArmor.png"));
-        rareItems.add(new Item("Sniper Lens", "Rare", "/ItemAssets/SniperLens.png"));
-        rareItems.add(new Item("Vampiric Sword", "Rare", "/ItemAssets/VampiricSword.png"));
-        rareItems.add(new Item("Spiky Shield", "Rare", "/ItemAssets/SpikyShield.png"));
+        rareItems.add(new Item("Holy Armor", "Rare", "/ItemAssets/HolyArmor.png", "Defense +15"));
+        rareItems.add(new Item("Sniper Lens", "Rare", "/ItemAssets/SniperLens.png", "Makes critical hits a lot stronger"));
+        rareItems.add(new Item("Vampiric Sword", "Rare", "/ItemAssets/VampiricSword.png", "Attack Power +15, Life Steal"));
+        rareItems.add(new Item("Spiky Shield", "Rare", "/ItemAssets/SpikyShield.png", "Reflects most damage back to the enemy"));
 
         //legendary :100::100::100:
-        legendaryItems.add(new Item("Light Speed Bracelet", "Legendary", "/ItemAssets/LightSpeedBracelet.png"));
-        legendaryItems.add(new Item("After Image", "Legendary", "/ItemAssets/AfterImage.png"));
-        legendaryItems.add(new Item("Holy Concoction", "Legendary", "/ItemAssets/HolyConcoction.png"));
-        legendaryItems.add(new Item("Totem of Rebirth", "Legendary", "/ItemAssets/TotemofRebirth.png"));
+        legendaryItems.add(new Item("Light Speed Bracelet", "Legendary", "/ItemAssets/LightSpeedBracelet.png", "Allows for an extra action in combat"));
+        legendaryItems.add(new Item("After Image", "Legendary", "/ItemAssets/AfterImage.png", "Attacks twice per turn"));
+        legendaryItems.add(new Item("Holy Concoction", "Legendary", "/ItemAssets/HolyConcoction.png", "Increases attack, defense, and health"));
+        legendaryItems.add(new Item("Totem of Rebirth", "Legendary", "/ItemAssets/TotemofRebirth.png", "Revives the player upon death, removed on use"));
         
         //side note: thank heavens for intellisense holy heck
         //actual meaningful sidenote: please work || side side side note: IT WORKS !!!! 
@@ -116,5 +116,9 @@ public class ItemManager {
             }
         }
         return null;
+    }
+
+    public String getEffectForItem(Item item){
+        return item.getEffect();
     }
 }

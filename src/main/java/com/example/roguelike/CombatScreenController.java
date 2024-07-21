@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,7 +22,6 @@ import java.io.IOException;
 import java.util.Random;
 
 public class CombatScreenController {
-    //private CombatScreen cs;
     @FXML
     private Button attackButton;
     @FXML
@@ -30,7 +30,16 @@ public class CombatScreenController {
     private Button runButton;
     @FXML
     private Text levelIndicator;
-
+    
+    //inventory grid
+    @FXML
+    private GridPane inventoryGrid;
+    @FXML
+    private Button closeInventoryButton;
+    @FXML
+    private Rectangle gridBackground;
+    private ItemManager itemManager = new ItemManager();
+    
     //Test Buttons
     @FXML
     private Button testButton;
@@ -54,6 +63,8 @@ public class CombatScreenController {
     private ImageView playerImage;
     @FXML
     private Text playerHitIndicator;
+    @FXML
+    private Text playerHealthNumbers;
 
     private int numOfActions = 0;
 
@@ -66,6 +77,8 @@ public class CombatScreenController {
     private Text enemyHitIndicator;
     @FXML
     private ImageView enemyImage;
+    @FXML
+    private Text enemyHealthNumbers;
 
 
     //variables
@@ -82,7 +95,12 @@ public class CombatScreenController {
 
     @FXML
     public void initialize(){
-        //cs = new CombatScreen();
+        //inventory screen
+        itemsButton.setOnAction(event -> showItems());
+        inventoryGrid.setVisible(false);
+        closeInventoryButton.setVisible(false);
+        gridBackground.setVisible(false);
+        closeInventoryButton.setOnAction(event -> hideItems());
         
         //Level Initialization
         level = new Level();
@@ -92,6 +110,8 @@ public class CombatScreenController {
         spawnEnemy();
         enemyImage.setImage(enemy.getImageForEnemy(enemy));
         enemyName.setVisible(true);
+        enemyHealthNumbers.setText(enemy.getCurrentHealth() + " / " + enemy.getMaxHealth());
+        level.setRewardMoney(enemy.getRewardMoney());
 
         //link the sprite of the enemy to the enemy that spawns
 
@@ -104,13 +124,13 @@ public class CombatScreenController {
 
 
         attackButton.setOnAction(event -> handleAttack());
-        itemsButton.setOnAction(event -> showItems());
         runButton.setOnAction(event -> escapeEncounter());
 
         //Player Linking
         player = new Player("playerData.txt");
         playerHealthBar.setProgress(player.getCurrentHealth() / player.getMaxHealth());
         playerHitIndicator.setVisible(false);
+        playerHealthNumbers.setText(player.getCurrentHealth() + " / " + player.getMaxHealth());
 
 
         //Quick Time Event Thingy
@@ -140,6 +160,7 @@ public class CombatScreenController {
         //Updates player health on the progress bar
         if (player != null){
             playerHealthBar.setProgress((double) player.getCurrentHealth() / player.getMaxHealth());
+            playerHealthNumbers.setText(player.getCurrentHealth() + " / " + player.getMaxHealth());
         }
     }
 
@@ -248,8 +269,8 @@ public class CombatScreenController {
 
         if(barStart <= greenEnd && barEnd >= greenStart){
             //Crit Damage
-            attackMultiplier = 1.5; //For now setting this to 50, but i'll change so that it does crit damage.
-            playerHitIndicator.setText("CRIT! Dealt " + (int) (player.getAttackPower() * attackMultiplier) + " damage!");
+            attackMultiplier = player.getCriticalDamageMultiplier(); 
+            playerHitIndicator.setText("CRIT! Dealt " + (int) Math.ceil(player.getAttackPower() * attackMultiplier) + " damage!");
 
         } else if (barStart <= yellowEnd && barEnd >= yellowStart){
             //Regular Hit
@@ -271,7 +292,12 @@ public class CombatScreenController {
         runButton.setVisible(true);
 
         //if the player has extra actions, then only after the second action will the enemy attack
-        if(player.checkExtraActions() && numOfActions > 1){
+        //if the player Doesnt have extra actions, then the enemy attacks regardless
+        if(player.checkExtraActions()){
+            if(numOfActions > 1){
+                enemyAttack();
+            }
+        } else{
             enemyAttack();
         }
     }
@@ -279,6 +305,8 @@ public class CombatScreenController {
     
 
     private void defeated() {
+        level.setDead();
+        level.saveLevelData();
         try{
             FXMLLoader loader = new FXMLLoader(getClass().getResource("DefeatedScreen.fxml"));
             Scene scene = new Scene(loader.load());
@@ -301,10 +329,62 @@ public class CombatScreenController {
     }
 
     private void showItems() {
+        //shows items in a grid after the player clicks the items button
+        //set the visibility to true
+        inventoryGrid.setVisible(true);
+        closeInventoryButton.setVisible(true);
+        gridBackground.setVisible(true);
+
+        //set the other buttons to invisible
+        attackButton.setVisible(false);
+        itemsButton.setVisible(false);
+        runButton.setVisible(false);
+
+        inventoryGrid.getChildren().clear(); //clear the existing content
+        int row = 0, column = 0;
+        for(Item item : player.getInventory()){
+            ImageView itemImage = new ImageView(itemManager.getImageForItem(item));
+            itemImage.setFitHeight(50);
+            itemImage.setFitWidth(50);
+            inventoryGrid.add(itemImage, column, row);
+            
+            column++;
+
+            if(column == 5){
+                column = 0;
+                row++;
+            }
+        }
+
+    }
+
+    private void hideItems(){
+        //gets rid of the items menu after show items shows
+        inventoryGrid.setVisible(false);
+        closeInventoryButton.setVisible(false);
+        gridBackground.setVisible(false);
+
+        attackButton.setVisible(true);
+        itemsButton.setVisible(true);
+        runButton.setVisible(true);
     }
 
     private void escapeEncounter() {
-        //TODO Implement the escape function
+        if(level.getLevel() % 5 != 0) { //only can escape if the level is not a boss level or a strong enemy level (5, 10, 15, etc)
+            //TODO check if this works after boss enemies are implemented
+
+            //reward money should be reset, and no items should be shown, but the player should be able to go to the next level
+            level.setRewardMoney(0);
+            level.levelup();
+            try{
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("EscapeScreen.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage) attackButton.getScene().getWindow();
+                stage.setScene(scene);
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+        }   
     }
 
     private void enemyAttack() {
@@ -359,6 +439,7 @@ public class CombatScreenController {
     private void updateEnemyGUI() {
         if (enemy != null){
             enemyHealthBar.setProgress((double) enemy.getCurrentHealth() / enemy.getMaxHealth());
+            enemyHealthNumbers.setText(enemy.getCurrentHealth() + " / " + enemy.getMaxHealth());
         }
         enemyName.setText(enemy.getName());
         enemyName.setVisible(true);

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roguelike.EscapeScreenController">
+   <children>
+      <Text layoutX="278.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Escaped" />
+      <Text layoutX="300.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$0" />
+      <Text layoutX="195.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You do not have the right to gain items" />
+      <Button fx:id="nextLevelButton" layoutX="506.0" layoutY="348.0" mnemonicParsing="false" text="Next Level" />
+      <ImageView fitHeight="16.0" fitWidth="13.0" layoutX="286.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../assets/coins.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

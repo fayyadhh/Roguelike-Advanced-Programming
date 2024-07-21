@@ -21,7 +21,4 @@ public class Main extends Application {
 }
 
 
-//TODO Link all classes with corresponding ui elements
 //TODO Polish UI elements (make it actually look nice)
-//TODO code the combat
-//TODO Randomize items on reward

@@ -19,12 +19,13 @@ public class Enemy {
     private int attackPower;
     private int defense;
     private EnemyType type;
+    private int rewardMoney;
 
     private String filePath; //File path to the enemy's sprite
 
     private int blockPreference; //How much the enemy will block if block is chosen
 
-    private Level level;
+    private Level level = new Level();
     private Player player;
 
     //Constructor
@@ -77,6 +78,7 @@ public class Enemy {
                 configureRegularEnemy(name);
                 break;
             case STRONG:
+                configureRegularEnemy(name);
                 StrongEnemyIncreaseStats(level.getLevel());
                 break;
             case BOSS:
@@ -86,37 +88,45 @@ public class Enemy {
     }
 
     private void configureRegularEnemy(String name) {
+        //increase stats per level
+        double healthIncreaseModifier = 1.5 * level.getLevel(); //50% per level
+        int attackPowerIncreaseModifier = 2 * level.getLevel(); //2 per level
+
         switch (name.toLowerCase()){
             case "slime":
-                this.currentHealth = 10;
-                this.maxHealth = 10;
-                this.attackPower = 2;
+                this.currentHealth = 10 * (int) healthIncreaseModifier;
+                this.maxHealth = 10 * (int) healthIncreaseModifier;
+                this.attackPower = 2 + attackPowerIncreaseModifier;
                 this.blockPreference = 1;
                 this.filePath = "/EnemyAssets/slime.png";
+                this.rewardMoney = 3;
                 // this.rarity = "Common";
                 break;
             case "goblin":
-                this.currentHealth = 15;
-                this.maxHealth = 15;
-                this.attackPower = 3;
+                this.currentHealth = 15 * (int) healthIncreaseModifier;
+                this.maxHealth = 15 * (int) healthIncreaseModifier;
+                this.attackPower = 3 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/Goblin.png";
+                this.rewardMoney = 3;
                 // this.rarity = "Common";
                 break;
             case "skeleton":
-                this.currentHealth = 10;
-                this.maxHealth = 10;
-                this.attackPower = 3;
+                this.currentHealth = 10 * (int) healthIncreaseModifier;
+                this.maxHealth = 10 * (int) healthIncreaseModifier;
+                this.attackPower = 3 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/Skeleton.png";
+                this.rewardMoney = 3;
                 // this.rarity = "Common";
                 break;
             case "worm":
-                this.currentHealth = 10;
-                this.maxHealth = 10;
-                this.attackPower = 2;
+                this.currentHealth = 10 * (int) healthIncreaseModifier;
+                this.maxHealth = 10 * (int) healthIncreaseModifier;
+                this.attackPower = 2 + attackPowerIncreaseModifier;
                 this.blockPreference = 0;
                 this.filePath = "/EnemyAssets/worm.png";
+                this.rewardMoney = 3;
                 // this.rarity = "Common";
                 break;
         }
@@ -124,16 +134,13 @@ public class Enemy {
     private void StrongEnemyIncreaseStats(int level){
         //Strong enemies are just Regular enemies but with increased stats
         //Therefore we can just increase the health and attack power by a certain modifier
-        double healthIncreaseModifier = 1.05; //5% per level
-        double attackPowerIncreaseModifier = 1.03; //3 per level
-
-        this.currentHealth = (int) (this.currentHealth * Math.pow(healthIncreaseModifier, level));
-        this.maxHealth = (int) (this.maxHealth * Math.pow(healthIncreaseModifier, level));
-        this.attackPower = (int) (this.attackPower * Math.pow(attackPowerIncreaseModifier, level));
+        this.maxHealth = maxHealth * 5; //makes the health of a strong enemy x5
+        this.currentHealth = maxHealth;
+        this.attackPower = attackPower + 50;
     }
 
     private void configureBossEnemy(String name){
-
+        //TODO once boss enemies are finalized
     }
 
     //Methods for the enemy's turns (i have no idea what im doing im just freeballing rn)
@@ -203,6 +210,10 @@ public class Enemy {
 
     public int getDefense() {
         return defense;
+    }
+
+    public int getRewardMoney() {
+        return rewardMoney;
     }
 
     public boolean isDead(){

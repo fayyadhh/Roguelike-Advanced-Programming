@@ -4,15 +4,18 @@ package com.example.roguelike;
 public class Item {
     private String name;
     // private double price; 
-    // private String effect; this effect variable doesnt need to be used, since why do we have a string telling the effect when we're just searching for the item name to give the effect anyways
+    private String effect; 
+    //this effect variable doesnt need to be used, since why do we have a string telling the effect when we're just searching for the item name to give the effect anyways
+    //nvm i found a use for it :D
 
     private String rarity;
     private String filePath;
 
-    public Item(String name,String rarity, String filePath) {
+    public Item(String name,String rarity, String filePath, String effect) {
         this.name = name;
         this.rarity = rarity;
         this.filePath = filePath;
+        this.effect = effect;
     }
 
     // Method to apply the effect of the item to the player
@@ -32,10 +35,10 @@ public class Item {
                 player.setCritMultiplier(player.getCritMultiplier() + 0.1);
                 break;
             case "Potion":
-                player.setMaxHealth(player.getMaxHealth() + 20);
+                player.heal(20);
                 break;
             case "Whetstone":
-                player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 0.05);
+                player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 0.5);
                 break;
             case "Chainmail Armor":
                 player.setDefense(player.getDefense() + 10);
@@ -66,7 +69,7 @@ public class Item {
                 break;
             case "Sniper Lens":
                 player.setCritMultiplier(player.getCritMultiplier() + 30);
-                player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 0.1);
+                player.setCriticalDamageMultiplier(player.getCriticalDamageMultiplier() + 3);
                 break;
             case "Spiky Shield":
                 player.setReflectDamage(player.getAttackPower());
@@ -119,9 +122,9 @@ public class Item {
         return rarity;
     }
 
-    // public String getEffect() {
-    //     return effect;
-    // }
+    public String getEffect() {
+        return effect;
+    }
 
 
     public void setRarity(String rarity) {

@@ -32,7 +32,7 @@ public class MainMenuController {
 
         
         //continue button logic is here
-        if(!(level.checkIfDead() && (level.getLevel() > 1))){ //if not dead and its not level 1
+        if(!(level.checkIfDead()) && (level.getLevel() > 1)){ //if not dead and its not level 1
             //change the opacity first
             continueButton.setOpacity(1);
             continueButton.setDisable(false);
