@@ -4,14 +4,24 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.roguelike.EscapeScreenController">
    <children>
-      <Text layoutX="278.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Escaped" />
-      <Text layoutX="300.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$0" />
-      <Text layoutX="195.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You do not have the right to gain items" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4b5865" height="400.0" layoutX="-2.0" stroke="BLACK" strokeType="INSIDE" width="606.0" />
+      <ImageView fitHeight="250.0" fitWidth="281.0" layoutX="201.0" layoutY="75.0" opacity="0.05" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../assets/ezgif-1-881827baac.png" />
+         </image>
+      </ImageView>
+      <Text fill="WHITE" layoutX="259.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Escaped">
+         <font>
+            <Font name="OCR A Extended" size="22.0" />
+         </font></Text>
+      <Text fill="WHITE" layoutX="300.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$0" />
+      <Text fill="WHITE" layoutX="202.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="You do not have the right to gain items" />
       <Button fx:id="nextLevelButton" layoutX="506.0" layoutY="348.0" mnemonicParsing="false" text="Next Level" />
       <ImageView fitHeight="16.0" fitWidth="13.0" layoutX="286.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true">
          <image>

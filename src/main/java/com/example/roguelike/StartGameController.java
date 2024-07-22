@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class StartGameController {
     @FXML
-    private Button enterDungeonButton;
+    private Button enterDungeonButton, backToMenuButton;
     @FXML
     private ImageView keepsake1;
     @FXML
@@ -29,6 +29,8 @@ public class StartGameController {
 
         //initialize buttons
         enterDungeonButton.setOnAction(event -> enterDungeon());
+        backToMenuButton.setOnAction(event -> backToMenu());
+
     }
 
     private void enterDungeon() {
@@ -36,6 +38,17 @@ public class StartGameController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MapScreen.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) enterDungeonButton.getScene().getWindow();
+            stage.setScene(scene);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void backToMenu() {
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
+            Scene scene = new Scene(loader.load());
+            Stage stage = (Stage) backToMenuButton.getScene().getWindow();
             stage.setScene(scene);
         } catch (IOException e){
             e.printStackTrace();
